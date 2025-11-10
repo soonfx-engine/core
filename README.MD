@@ -9,7 +9,7 @@
 
 **基于TypeScript开发的 游戏数值计算和公式系统**
 
-[安装](#-安装) · [快速开始](#-快速开始) · [文档](#-核心-api) · [示例项目](https://github.com/jiyi-soon-fx/SoonFx/tree/main/docs/examples) [在线示例](https://jiyi-soon-fx.github.io/SoonFx)
+[安装](#-安装) · [快速开始](#-快速开始) · [文档](#-核心-api) · [示例项目](docs/examples) [在线示例](https://jiyi-soon-fx.github.io/SoonFx)
 
 </div>
 
