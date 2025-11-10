@@ -9,7 +9,7 @@
 
 **基于TypeScript开发的 游戏数值计算和公式系统**
 
-[安装](#-安装) · [快速开始](#-快速开始) · [文档](#-核心-api) · [示例项目](https://github.com/JYsoon/SoonFx/tree/main/docs/examples) [在线示例](https://jysoon.github.io/SoonFx)
+[安装](#-安装) · [快速开始](#-快速开始) · [文档](#-核心-api) · [示例项目](https://github.com/jiyi-soon-fx/SoonFx/tree/main/docs/examples) [在线示例](https://jysoon.github.io/SoonFx)
 
 </div>
 
@@ -173,11 +173,11 @@ const coord = fx.coordinate(x, y, angle, distance);
 
 ## 📖 角色属性、战斗数值示例
 
-查看 [示例项目](https://github.com/JYsoon/SoonFx/tree/main/docs/examples) 获取完整的开发示例：
+查看 [示例项目](https://github.com/jiyi-soon-fx/SoonFx/tree/main/docs/examples) 获取完整的开发示例：
 
 ```bash
 # 克隆仓库
-git clone https://github.com/JYsoon/SoonFx.git
+git clone https://github.com/jiyi-soon-fx/SoonFx.git
 # 示例代码
 cd SoonFx/docs/examples
 
@@ -258,7 +258,7 @@ fx. // IDE 会显示所有可用方法
 
 ```bash
 # 克隆仓库
-git clone https://github.com/JYsoon/SoonFx.git
+git clone https://github.com/jiyi-soon-fx/SoonFx.git
 cd SoonFx
 
 # 安装依赖
@@ -276,7 +276,7 @@ npm run dev
 ## 📝 更新日志
  
 
-查看 [完整更新日志](https://github.com/JYsoon/SoonFx/releases)
+查看 [完整更新日志](https://github.com/jiyi-soon-fx/SoonFx/releases)
 
 ## 📄 许可证
 
@@ -285,24 +285,24 @@ npm run dev
 ## 🔗 相关链接
 
 - 📦 [npm 包](https://www.npmjs.com/package/@soonfx/fx)
-- 💻 [GitHub 仓库](https://github.com/JYsoon/SoonFx)
-- 📖 [在线文档](https://github.com/JYsoon/SoonFx#readme)
-- 🐛 [问题反馈](https://github.com/JYsoon/SoonFx/issues)
-- 💬 [讨论区](https://github.com/JYsoon/SoonFx/discussions)
+- 💻 [GitHub 仓库](https://github.com/jiyi-soon-fx/SoonFx)
+- 📖 [在线文档](https://github.com/jiyi-soon-fx/SoonFx#readme)
+- 🐛 [问题反馈](https://github.com/jiyi-soon-fx/SoonFx/issues)
+- 💬 [讨论区](https://github.com/jiyi-soon-fx/SoonFx/discussions)
 
 ## 📞 获取帮助
 
 如果您在使用过程中遇到问题：
 
-- 💬 [GitHub Discussions](https://github.com/JYsoon/SoonFx/discussions) - 提问和讨论
-- 🐛 [GitHub Issues](https://github.com/JYsoon/SoonFx/issues) - Bug 报告和功能请求
+- 💬 [GitHub Discussions](https://github.com/jiyi-soon-fx/SoonFx/discussions) - 提问和讨论
+- 🐛 [GitHub Issues](https://github.com/jiyi-soon-fx/SoonFx/issues) - Bug 报告和功能请求
 - 📧 [team@jysoon.com](mailto:team@jysoon.com) - 邮件联系
 
 ## ⭐ Star History
 
 如果这个项目对您有帮助，请给我们一个 Star！这对我们非常重要。
 
-[![Star History Chart](https://api.star-history.com/svg?repos=JYsoon/SoonFx&type=Date)](https://star-history.com/#JYsoon/SoonFx&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=jiyi-soon-fx/SoonFx&type=Date)](https://star-history.com/#jiyi-soon-fx/SoonFx&Date)
 
 ---
 
@@ -310,8 +310,8 @@ npm run dev
 
 **[⬆ 回到顶部](#soonfx-游戏数值引擎)**
 
-Made with ❤️ by [JYsoon](https://github.com/JYsoon)
+Made with ❤️ by [jiyi-soon-fx](https://github.com/jiyi-soon-fx)
 
-Copyright © 2025 JYsoon. All rights reserved.
+Copyright © 2025 jiyi-soon-fx. All rights reserved.
 
 </div>

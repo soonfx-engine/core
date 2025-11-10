@@ -1,6 +1,6 @@
 {
     "name": "@soonfx/fx",
-    "version": "1.0.10108",
+    "version": "1.0.10109",
     "description": "SoonFx 游戏数值引擎 - 强大的游戏数值引擎运行库",
     "main": "lib/index.mjs",
     "module": "lib/index.mjs",
@@ -30,12 +30,12 @@
     "license": "MIT",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/JYsoon/SoonFx.git"
+        "url": "git+https://github.com/jiyi-soon-fx/SoonFx.git"
     },
     "bugs": {
-        "url": "https://github.com/JYsoon/SoonFx/issues"
+        "url": "https://github.com/jiyi-soon-fx/SoonFx/issues"
     },
-    "homepage": "https://github.com/JYsoon/SoonFx#readme",
+    "homepage": "https://github.com/jiyi-soon-fx/SoonFx#readme",
     "engines": {
         "node": ">=14.0.0"
     },
