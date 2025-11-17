@@ -7,7 +7,7 @@ const path = require('path');
 const buildDir = path.join(__dirname, '../build/fx');
 const packagePath = path.join(buildDir, 'package.json');
 
-console.log('🔧 本地安装 Fx Engine...\n');
+console.log('🔧 本地安装 SoonFx Engine...\n');
 
 // 检查构建目录是否存在
 if (!fs.existsSync(buildDir)) {
@@ -60,7 +60,7 @@ try {
     // 创建测试文件
     const testCode = `import { fx } from 'fx';
 
-console.log('🎮 Fx Engine 测试');
+console.log('🎮 SoonFx Engine 测试');
 console.log('版本检查:', typeof fx);
 
 // 测试数学函数

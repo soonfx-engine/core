@@ -8,7 +8,7 @@ const buildDir = path.join(__dirname, '../build/fx');
 const rootDir = path.join(__dirname, '..');
 const packagePath = path.join(buildDir, 'package.json');
 
-console.log('🚀 开始发布 Fx Engine 到 npm...\n');
+console.log('🚀 开始发布 SoonFx Engine 到 npm...\n');
 
 // 在发布之前，确保 LICENSE 和 README 是最新的
 console.log('📋 准备必要文件...');

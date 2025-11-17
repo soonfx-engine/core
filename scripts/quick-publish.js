@@ -4,7 +4,7 @@ const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
-console.log('🚀 快速发布 Fx Engine 到 npm...\n');
+console.log('🚀 快速发布 SoonFx Engine 到 npm...\n');
 
 try {
     // 0. 准备必要文件
