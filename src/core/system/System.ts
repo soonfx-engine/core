@@ -445,28 +445,28 @@ export class fx {
     vlowerLimitRatio: number | null,
     vupperLimitRatio: number | null
   ): number[] {
-    var ratioData: number[] = [];
-    var outputData: number[] = [];
-    var lowerLimitRatio = vlowerLimitRatio;
-    var upperLimitRatio = vupperLimitRatio;
+    const ratioData: number[] = [];
+    const outputData: number[] = [];
+    let lowerLimitRatio = vlowerLimitRatio;
+    let upperLimitRatio = vupperLimitRatio;
     if (lowerLimitRatio == null) {
       lowerLimitRatio = 0.382;
     }
     if (upperLimitRatio == null) {
       upperLimitRatio = 0.618;
     }
-    var cumulativeConsumption = 0;
-    for (var i = 1; i <= segmentCount; i++) {
-      var maxLevel = Math.pow(segmentCount, exponent);
-      var currentLevel = Math.pow(i, exponent);
-      var incrementalRatio = currentLevel / maxLevel;
-      var consumptionValue =
+    let cumulativeConsumption = 0;
+    for (let i = 1; i <= segmentCount; i++) {
+      const maxLevel = Math.pow(segmentCount, exponent);
+      const currentLevel = Math.pow(i, exponent);
+      const incrementalRatio = currentLevel / maxLevel;
+      const consumptionValue =
         (i * (10000 * lowerLimitRatio)) / segmentCount +
         incrementalRatio * (10000 * upperLimitRatio);
       ratioData.push(consumptionValue);
       cumulativeConsumption += consumptionValue;
     }
-    for (var j = 0; j < ratioData.length; j++) {
+    for (let j = 0; j < ratioData.length; j++) {
       if (type == null) {
         outputData.push(
           (ratioData[j] / cumulativeConsumption) * totalConsumption
@@ -508,7 +508,7 @@ export class fx {
     address: string
   ): any {
     if (folder.tree == null) return null;
-    for (var i = 0; i < folder.tree.length; i++) {
+    for (let i = 0; i < folder.tree.length; i++) {
       if (folder.tree[i].absoluteAddress == address) {
         array.push(folder.tree[i]);
         return;
@@ -557,7 +557,7 @@ export class fx {
     array: any[],
     address: string
   ): void {
-    for (var i = 0; i < array.length; i++) {
+    for (let i = 0; i < array.length; i++) {
       if (array[i].absoluteAddress == null) {
         array[i].absoluteAddress = fx.getAbsoluteAddress(array[i]);
       }
@@ -618,8 +618,8 @@ export class fx {
    * @param bodyArray
    */
   static addLibraryBody = function (saveArray: any[], bodyArray: any[]): void {
-    for (var i = 0; i < bodyArray.length; i++) {
-      let bodyItem = bodyArray[i];
+    for (let i = 0; i < bodyArray.length; i++) {
+      const bodyItem = bodyArray[i];
       let newOriginData = bodyItem.sheetData?.originData;
       if (newOriginData) {
         newOriginData = { ...newOriginData };
@@ -669,8 +669,8 @@ export class fx {
           bodyData.id = bodyItem.id;
           saveArray.push(bodyData);
           for (var j = 0; j < bodyItem.operationArray.length; j++) {
-            let bodyItemOperation = bodyItem.operationArray[j];
-            var operationData = fx.createOperationLayerData(
+            const bodyItemOperation = bodyItem.operationArray[j];
+            const operationData = fx.createOperationLayerData(
               bodyItemOperation.body.name,
               bodyItemOperation.body.type,
               bodyItemOperation.body.value,
@@ -685,7 +685,7 @@ export class fx {
           }
           for (var j = 0; j < bodyItem.metadataArray.length; j++) {
             const bodyItemMetadata = bodyItem.metadataArray[j];
-            var metadata = fx.createBillboarMetadataData(
+            const metadata = fx.createBillboarMetadataData(
               bodyItemMetadata.body.name,
               bodyItemMetadata.body.type,
               bodyItemMetadata.body.value,
@@ -711,7 +711,7 @@ export class fx {
    * @param init
    */
   static parseLibraryBody = function (data: any[], init: boolean): void {
-    for (var i = 0; i < data.length; i++) {
+    for (let i = 0; i < data.length; i++) {
       const dataItem = data[i];
       if (dataItem.type == NodeType.CalculationLayer) {
         var bodyArray = [];
@@ -738,8 +738,8 @@ export class fx {
         var bodyArray = [];
         fx.getLibraryBody(bodyArray, fx.targetFolder.tree, dataItem.site);
         fx.editBody = bodyArray[0];
-        var parent = bodyArray[0];
-        for (var j = 0; j < dataItem.operationArray.length; j++) {
+        const parent = bodyArray[0];
+        for (let j = 0; j < dataItem.operationArray.length; j++) {
           const dataItemOperation = dataItem.operationArray[j];
           if (dataItemOperation.type == NodeType.CalculationLayer) {
             var bodyArray = [];
@@ -801,7 +801,7 @@ export class fx {
     isAI?: boolean,
     parent?: any
   ): void {
-    for (var i = 0; i < data.length; i++) {
+    for (let i = 0; i < data.length; i++) {
       const dataItem = data[i];
       if (dataItem.isFile == true) {
         var folder = new fx.Folder(dataItem.name);
@@ -824,7 +824,7 @@ export class fx {
 
         fx.selectBody = folder;
         fx.selectBody.absoluteAddress = dataItem.site;
-        for (var j = 0; j < dataItem.operationArray.length; j++) {
+        for (let j = 0; j < dataItem.operationArray.length; j++) {
           const dataItemOperation = dataItem.operationArray[j];
           if (dataItemOperation.type == NodeType.CalculationLayer) {
             fx.editBody = new fx.VariableValue(dataItemOperation.name, null, 5);
@@ -895,13 +895,13 @@ export class fx {
                 Object.values(data).forEach((item: any) => {
                   if (item?.source) {
                     const dataTreeItem = item.source;
-                    var bodyArray = [];
+                    const bodyArray = [];
                     fx.getLibraryBody(
                       bodyArray,
                       fx.targetFolder.tree,
                       fx.getAbsoluteAddress(dataTreeItem)
                     );
-                    var bodydataVar = bodyArray[0] as any;
+                    const bodydataVar = bodyArray[0] as any;
                     item.source = bodydataVar.copy();
                   }
                 });
@@ -1024,13 +1024,13 @@ export class fx {
             Object.values(data).forEach((item: any) => {
               if (item?.source) {
                 const dataTreeItem = item.source;
-                var bodyArray = [];
+                const bodyArray = [];
                 fx.getLibraryBody(
                   bodyArray,
                   fx.targetFolder.tree,
                   fx.getAbsoluteAddress(dataTreeItem)
                 );
-                var bodydataVar = bodyArray[0] as any;
+                const bodydataVar = bodyArray[0] as any;
                 item.source = bodydataVar.copy();
               }
             });
@@ -1072,7 +1072,7 @@ export class fx {
    * @returns {*}
    */
   static getBody = function (folder: any, address: string, valuec?: any): any {
-    var array = [];
+    const array = [];
     fx.recursionLibraryBody(array, folder, address);
     if (valuec != null) {
       (array[0] as any).body.setFunctionId(valuec);
@@ -1082,13 +1082,13 @@ export class fx {
 
   static evaluateExpression = function (expression: string): any {
     // 将自然表达式转换为逆波兰表达式
-    var rpn = fx.toRPN(expression);
+    const rpn = fx.toRPN(expression);
 
     // 定义一个栈用于计算逆波兰表达式
-    var stack: any[] = [];
+    const stack: any[] = [];
 
     // 遍历逆波兰表达式
-    for (let token of rpn) {
+    for (const token of rpn) {
       if (fx.isNumber(token)) {
         // 如果是数字，则直接入栈
         stack.push(Number(token));
@@ -1153,7 +1153,7 @@ export class fx {
     // 去掉空格expression，制表符，换行符
     expression = expression + "";
     expression = expression.replace(/\s+/g, "");
-    var operators = {
+    const operators = {
       "+": 1,
       "-": 1,
       "*": 2,
@@ -1168,8 +1168,8 @@ export class fx {
       "!=": 4,
     };
 
-    var output: any[] = [];
-    var stack: any[] = [];
+    const output: any[] = [];
+    const stack: any[] = [];
 
     // 添加符号到输出队列
     function addToOutput(token: string) {
@@ -1178,7 +1178,7 @@ export class fx {
 
     // 弹出栈顶符号到输出队列
     function popFromStack() {
-      var operator = stack.pop();
+      const operator = stack.pop();
 
       if (operator) {
         addToOutput(operator);
@@ -1209,7 +1209,7 @@ export class fx {
 
     // 遍历表达式
     for (let i = 0; i < expression.length; i++) {
-      var token = expression[i];
+      const token = expression[i];
 
       if (fx.isNumber(token) || isNegativeNumber(token, i)) {
         // 如果是数字或者负数，则添加到输出队列
@@ -1287,7 +1287,7 @@ export class fx {
    * @param 数组
    */
   static recursionSyncBody = function (body: any[]): void {
-    for (var i = 0; i < body.length; i++) {
+    for (let i = 0; i < body.length; i++) {
       if (body[i].type == NodeType.CalculationLayer) {
         body[i].syncBody();
       }
@@ -1310,7 +1310,7 @@ export class fx {
    * @param init
    */
   static clearCacheRecursion = function (data: any): void {
-    for (var i = 0; i < data.tree.length; i++) {
+    for (let i = 0; i < data.tree.length; i++) {
       const treeItem = data.tree[i];
       if (treeItem.type == NodeType.CalculationLayer) {
         treeItem.cacheValue = null;
@@ -1326,8 +1326,8 @@ export class fx {
     fx.isBillboardLayerView = false;
     new fx.FXCentre();
 
-    var stageData = JSON.parse(json).stage.operationArray;
-    var libraryData = JSON.parse(json).library.operationArray;
+    const stageData = JSON.parse(json).stage.operationArray;
+    const libraryData = JSON.parse(json).library.operationArray;
     fx.editBody = null;
     fx.selectBody = null;
     fx.createLibraryBody(libraryData, true);
@@ -1351,7 +1351,7 @@ export class fx {
    */
   static recursionGetBillboard = function (array: any[], folder: any): any {
     if (folder.tree == null) return null;
-    for (var i = 0; i < folder.tree.length; i++) {
+    for (let i = 0; i < folder.tree.length; i++) {
       if (folder.tree[i] instanceof fx.BillboardLayer) {
         array.push(folder.tree[i]);
       }
@@ -1366,7 +1366,7 @@ export class fx {
    * @param bodyArray
    */
   static saveBody = function (saveArray: any[], bodyArray: any[]): void {
-    for (var i = 0; i < bodyArray.length; i++) {
+    for (let i = 0; i < bodyArray.length; i++) {
       const bodyItem = bodyArray[i];
       if (bodyItem.type == NodeType.OperationBody) {
         var cx = 0;
@@ -1378,7 +1378,7 @@ export class fx {
           cy = bodyItem.view.getY();
         }
 
-        var operationBodySaveData = fx.createBodyData(
+        const operationBodySaveData = fx.createBodyData(
           bodyItem.type,
           bodyItem.isFunction,
           bodyItem.isBindingOperation,
@@ -1398,7 +1398,7 @@ export class fx {
         saveArray.push(operationBodySaveData);
         for (var j = 0; j < bodyItem.tree.length; j++) {
           const bodyTreeItem = bodyItem.tree[j];
-          let treeData = fx.createVarData(
+          const treeData = fx.createVarData(
             bodyTreeItem.TID,
             bodyTreeItem.name,
             bodyTreeItem.value,
@@ -1435,7 +1435,7 @@ export class fx {
           cx = bodyItem.view.getX();
           cy = bodyItem.view.getY();
         }
-        var symbolBodySaveData = fx.createSymbolData(
+        const symbolBodySaveData = fx.createSymbolData(
           bodyItem.type,
           bodyItem.operator,
           bodyItem.isFunctionId,
@@ -1478,9 +1478,9 @@ export class fx {
               );
               childSaveData.id = bodyTreeItem.id;
               symbolBodySaveData.tree.push(childSaveData);
-              for (var n = 0; n < bodyTreeItem.tree.length; n++) {
+              for (let n = 0; n < bodyTreeItem.tree.length; n++) {
                 const bodyTreeItemChildTreeItem = bodyTreeItem.tree[n];
-                let treeData = fx.createVarData(
+                const treeData = fx.createVarData(
                   bodyTreeItemChildTreeItem.TID,
                   bodyTreeItemChildTreeItem.name,
                   bodyTreeItemChildTreeItem.value,
@@ -1535,7 +1535,7 @@ export class fx {
           }
         }
       } else if (bodyItem.type == NodeType.Bookmark) {
-        var bodyData = fx.createBookmarkData(bodyItem);
+        const bodyData = fx.createBookmarkData(bodyItem);
         bodyData.id = bodyItem.id;
         saveArray.push(bodyData);
       }
@@ -1557,7 +1557,7 @@ export class fx {
    * @param tree
    */
   static recursionSeekBody = function (parent: any[], tree: any[]): void {
-    for (var i = 0; i < tree.length; i++) {
+    for (let i = 0; i < tree.length; i++) {
       const treeItem = tree[i];
       switch (treeItem.type) {
         case "OperationBody":
@@ -1574,7 +1574,7 @@ export class fx {
             treeItem.funcType
           );
           parent.push(bodyView);
-          for (var n = 0; n < treeItem.tree.length; n++) {
+          for (let n = 0; n < treeItem.tree.length; n++) {
             const treeTreeItem = treeItem.tree[n];
             bodyView.tree.push(
               fx.createVarData(
@@ -1736,7 +1736,7 @@ export class fx {
     logicalChildArray: any,
     selectedOutputInfo?: any
   ): any {
-    var saveData: any = {};
+    const saveData: any = {};
 
     if (fx.code) {
       saveData.TID = TID;
@@ -1824,7 +1824,7 @@ export class fx {
     isAdvance: boolean,
     funcType: any
   ): any {
-    var saveData: any = {};
+    const saveData: any = {};
     saveData.tree = [];
     saveData.type = type;
     saveData.isFunction = isFunction;
@@ -1858,7 +1858,7 @@ export class fx {
     isWeight: boolean,
     funcType: any
   ): any {
-    var saveData: any = {};
+    const saveData: any = {};
     saveData.tree = [];
     saveData.type = type;
     saveData.operator = operator;
@@ -1878,7 +1878,7 @@ export class fx {
    * @returns {{}}
    */
   static createBookmarkData = function (address: any) {
-    var saveData: any = {};
+    const saveData: any = {};
     saveData.x = address.x;
     saveData.y = address.y;
     saveData.width = address.width;
@@ -1895,7 +1895,7 @@ export class fx {
    * @returns {{}}
    */
   static createChartData = function (data: any) {
-    var saveData: any = {};
+    const saveData: any = {};
     saveData.name = data.name;
     saveData.minValue = data.minValue;
     saveData.maxValue = data.maxValue;
@@ -1913,9 +1913,9 @@ export class fx {
       saveData.metadata = fx.getAbsoluteAddress(data.metadata.source);
 
     for (var i = 0, len = data.metadataArray.length; i < len; i++) {
-      var metadata = data.metadataArray[i];
-      var source = metadata.source;
-      var itemData: any = {
+      const metadata = data.metadataArray[i];
+      const source = metadata.source;
+      const itemData: any = {
         site: fx.getAbsoluteAddress(source),
       };
       if (metadata.minValue != 1) {
@@ -1937,14 +1937,14 @@ export class fx {
    * @returns {[]}
    */
   static seekSource = function (bodyArray) {
-    var parentArray: any[] = [];
-    for (var i = 0; i < bodyArray.length; i++) {
+    const parentArray: any[] = [];
+    for (let i = 0; i < bodyArray.length; i++) {
       const bodyItem = bodyArray[i];
       if (bodyItem.parent == null) {
         if (parentArray.length == 0) {
           parentArray.push(bodyItem);
         } else {
-          for (var j = 0; j < parentArray.length; j++) {
+          for (let j = 0; j < parentArray.length; j++) {
             if (parentArray[j] != bodyItem) {
               parentArray.push(bodyItem);
               break;
@@ -1972,7 +1972,7 @@ export class fx {
     address: any,
     module: any
   ) {
-    var saveData: any = {};
+    const saveData: any = {};
     saveData.name = name;
     saveData.type = type;
     saveData.value = value;
@@ -2004,7 +2004,7 @@ export class fx {
     sheetData: any,
     childCell: any
   ) {
-    var saveData: any = {};
+    const saveData: any = {};
 
     saveData.name = name;
     saveData.type = type;
@@ -2031,7 +2031,7 @@ export class fx {
     address: any,
     monitored: any
   ) {
-    var saveData: any = {};
+    const saveData: any = {};
     saveData.name = name;
     saveData.site = fx.getAbsoluteAddress(address);
     saveData.isBoard = true;
@@ -2049,7 +2049,7 @@ export class fx {
    * @returns {{}}
    */
   static createFolderData = function (name: any, isFolder: any, address: any) {
-    var saveData: any = {};
+    const saveData: any = {};
     saveData.name = name;
     saveData.isFile = isFolder;
     saveData.operationArray = [];
@@ -2066,14 +2066,14 @@ export class fx {
     if (body.tree.length > 1) {
       if (body.tree[0].getValue() != 0 && body.tree[1].getValue() != 0)
         if (Number(body.tree[0].getValue()) > Number(body.tree[1].getValue())) {
-          var baseValue = Number(body.tree[0].getValue());
-          var accumulatedValue = 0;
+          let baseValue = Number(body.tree[0].getValue());
+          let accumulatedValue = 0;
 
-          for (var i = 1; i < body.tree.length; i++) {
+          for (let i = 1; i < body.tree.length; i++) {
             accumulatedValue += Number(body.treeItem.getValue());
           }
-          var boutValue = 0;
-          var overlayValue = 0;
+          let boutValue = 0;
+          let overlayValue = 0;
           while (baseValue >= accumulatedValue) {
             overlayValue += accumulatedValue;
             baseValue -= accumulatedValue;
@@ -2092,8 +2092,8 @@ export class fx {
    * @returns {{}}
    */
   static copy = function (source: any): any {
-    var result = {};
-    for (var key in source) {
+    const result = {};
+    for (const key in source) {
       if (source.hasOwnProperty(key)) {
         result[key] =
           typeof source[key] === "object" ? fx.copy(source[key]) : source[key];
@@ -2113,7 +2113,7 @@ export class fx {
   };
 
   static coordinate = function (child: any, restriction?: any): number[] {
-    var s = 1;
+    let s = 1;
     if (fx.visualVersionCompatibility) {
       s = 0.5;
     }
@@ -2141,8 +2141,8 @@ export class fx {
     restriction?: any,
     copy?: boolean
   ): any {
-    var rootDirectory = null;
-    for (var i = 0; i < data.length; i++) {
+    let rootDirectory = null;
+    for (let i = 0; i < data.length; i++) {
       const dataItem = data[i];
       if (restriction == null)
         if (dataItem.parent != null) {
@@ -2191,7 +2191,7 @@ export class fx {
                   new Date().getTime() + fx.functionAddIndex;
                 fx.functionAddIndex++;
               }
-              var bodydataView = fx.createFunctionBody(bodyView, bodydata);
+              let bodydataView = fx.createFunctionBody(bodyView, bodydata);
 
               bodydataView.setMacros(fx.amendMacros(dataTreeItem));
 
@@ -2233,7 +2233,7 @@ export class fx {
                   new Date().getTime() + fx.functionAddIndex;
                 fx.functionAddIndex++;
               }
-              var bodydataView = fx.createFunctionBody(bodyView, bodydata);
+              let bodydataView = fx.createFunctionBody(bodyView, bodydata);
 
               bodydataView.enemyFlag = dataTreeItem.enemy;
               bodydataView.funcType = dataTreeItem.funcType;
@@ -2258,14 +2258,14 @@ export class fx {
               bodydataView.step = dataTreeItem.step;
               bodydataView.logicalChildArray = [];
               dataTreeItem.logicalChildArray.forEach((variable) => {
-                var bodyArray = [];
+                const bodyArray = [];
                 fx.getLibraryBody(
                   bodyArray,
                   fx.targetFolder.tree,
                   fx.getAbsoluteAddress(variable)
                 );
-                var bodydataCp = bodyArray[0] as any;
-                var bodydataViewCp = (bodydataCp as any).copy();
+                const bodydataCp = bodyArray[0] as any;
+                const bodydataViewCp = (bodydataCp as any).copy();
 
                 bodydataViewCp.enemyFlag = dataTreeItem.enemy;
                 bodydataViewCp.funcType = dataTreeItem.funcType;
@@ -2298,8 +2298,8 @@ export class fx {
                   fx.getAbsoluteAddress(dataTreeItem)
                 );
               }
-              var bodydataVar = bodyArray[0] as any;
-              var bodydataView = fx.createVariableBody(bodyView, bodydataVar);
+              let bodydataVar = bodyArray[0] as any;
+              let bodydataView = fx.createVariableBody(bodyView, bodydataVar);
 
               bodydataView.enemyFlag = dataTreeItem.enemy;
               bodydataView.funcType = dataTreeItem.funcType;
@@ -2359,7 +2359,7 @@ export class fx {
                   new Date().getTime() + fx.functionAddIndex;
                 fx.functionAddIndex++;
               }
-              var bodydataView = fx.createFunctionBody(bodyView, bodydata);
+              let bodydataView = fx.createFunctionBody(bodyView, bodydata);
               bodydataView.setMacros(fx.amendMacros(dataTreeItem));
               bodydataView.enemyFlag = dataTreeItem.enemy;
               bodydataView.funcType = dataTreeItem.funcType;
@@ -2396,7 +2396,7 @@ export class fx {
                   new Date().getTime() + fx.functionAddIndex;
                 fx.functionAddIndex++;
               }
-              var bodydataView = fx.createFunctionBody(bodyView, bodydata);
+              let bodydataView = fx.createFunctionBody(bodyView, bodydata);
 
               bodydataView.enemyFlag = dataTreeItem.enemy;
               bodydataView.funcType = dataTreeItem.funcType;
@@ -2421,14 +2421,14 @@ export class fx {
               bodydataView.step = dataTreeItem.step;
               bodydataView.logicalChildArray = [];
               dataTreeItem.logicalChildArray.forEach((variable) => {
-                var bodyArray = [];
+                const bodyArray = [];
                 fx.getLibraryBody(
                   bodyArray,
                   fx.targetFolder.tree,
                   fx.getAbsoluteAddress(variable)
                 );
-                var bodydataCp = bodyArray[0] as any;
-                var bodydataViewCp = (bodydataCp as any).copy();
+                const bodydataCp = bodyArray[0] as any;
+                const bodydataViewCp = (bodydataCp as any).copy();
 
                 bodydataViewCp.enemyFlag = dataTreeItem.enemy;
                 bodydataViewCp.funcType = dataTreeItem.funcType;
@@ -2471,9 +2471,9 @@ export class fx {
                 }
               }
 
-              var bodydataVar = bodyArray[0] as any;
+              let bodydataVar = bodyArray[0] as any;
 
-              var bodydataView = fx.createVariableBody(bodyView, bodydataVar);
+              let bodydataView = fx.createVariableBody(bodyView, bodydataVar);
 
               bodydataView.enemyFlag = dataTreeItem.enemy;
               bodydataView.funcType = dataTreeItem.funcType;
@@ -2517,7 +2517,7 @@ export class fx {
         dataItem.type == NodeType.SymbolBody ||
         dataItem.type == "符号运算体类"
       ) {
-        var symbolBody = fx.createSymbolBody(
+        const symbolBody = fx.createSymbolBody(
           null,
           null,
           dataItem.operator,
@@ -2578,7 +2578,7 @@ export class fx {
                     bodydata.TID = new Date().getTime() + fx.functionAddIndex;
                     fx.functionAddIndex++;
                   }
-                  var bodydataView = fx.createFunctionBody(bodyView, bodydata);
+                  let bodydataView = fx.createFunctionBody(bodyView, bodydata);
                   bodydataView.macros = fx.amendMacros(dataTreeTreeItem);
                   bodydataView.enemyFlag = dataTreeTreeItem.enemy;
                   bodydataView.funcType = dataTreeTreeItem.funcType;
@@ -2616,7 +2616,7 @@ export class fx {
                       new Date().getTime() + fx.functionAddIndex;
                     fx.functionAddIndex++;
                   }
-                  var bodydataView = fx.createFunctionBody(bodyView, bodydata);
+                  let bodydataView = fx.createFunctionBody(bodyView, bodydata);
 
                   bodydataView.enemyFlag = dataTreeItem.enemy;
                   bodydataView.funcType = dataTreeItem.funcType;
@@ -2643,14 +2643,14 @@ export class fx {
                   bodydataView.step = dataTreeItem.step;
                   bodydataView.logicalChildArray = [];
                   dataTreeItem.logicalChildArray.forEach((variable) => {
-                    var bodyArray = [];
+                    const bodyArray = [];
                     fx.getLibraryBody(
                       bodyArray,
                       fx.targetFolder.tree,
                       fx.getAbsoluteAddress(variable)
                     );
-                    var bodydataCp = bodyArray[0] as any;
-                    var bodydataViewCp = (bodydataCp as any).copy();
+                    const bodydataCp = bodyArray[0] as any;
+                    const bodydataViewCp = (bodydataCp as any).copy();
 
                     bodydataViewCp.enemyFlag = dataTreeItem.enemy;
                     bodydataViewCp.funcType = dataTreeItem.funcType;
@@ -2685,8 +2685,8 @@ export class fx {
                     );
                   }
 
-                  var bodydataVar = bodyArray[0];
-                  var bodydataView = fx.createVariableBody(
+                  let bodydataVar = bodyArray[0];
+                  let bodydataView = fx.createVariableBody(
                     bodyView,
                     bodydataVar
                   );
@@ -2752,7 +2752,7 @@ export class fx {
                     bodydata.TID = new Date().getTime() + fx.functionAddIndex;
                     fx.functionAddIndex++;
                   }
-                  var bodydataView = fx.createFunctionBody(bodyView, bodydata);
+                  let bodydataView = fx.createFunctionBody(bodyView, bodydata);
                   bodydataView.setMacros(fx.amendMacros(dataTreeTreeItem));
                   bodydataView.enemyFlag = dataTreeTreeItem.enemy;
                   bodydataView.funcType = dataTreeTreeItem.funcType;
@@ -2790,7 +2790,7 @@ export class fx {
                       new Date().getTime() + fx.functionAddIndex;
                     fx.functionAddIndex++;
                   }
-                  var bodydataView = fx.createFunctionBody(bodyView, bodydata);
+                  let bodydataView = fx.createFunctionBody(bodyView, bodydata);
 
                   bodydataView.enemyFlag = dataTreeTreeItem.enemy;
                   bodydataView.funcType = dataTreeTreeItem.funcType;
@@ -2817,14 +2817,14 @@ export class fx {
                   bodydataView.step = dataTreeTreeItem.step;
                   bodydataView.logicalChildArray = [];
                   dataTreeTreeItem.logicalChildArray.forEach((variable) => {
-                    var bodyArray = [];
+                    const bodyArray = [];
                     fx.getLibraryBody(
                       bodyArray,
                       fx.targetFolder.tree,
                       fx.getAbsoluteAddress(variable)
                     );
-                    var bodydataCp = bodyArray[0] as any;
-                    var bodydataViewCp = (bodydataCp as any).copy();
+                    const bodydataCp = bodyArray[0] as any;
+                    const bodydataViewCp = (bodydataCp as any).copy();
 
                     bodydataViewCp.enemyFlag = dataTreeTreeItem.enemy;
                     bodydataViewCp.funcType = dataTreeTreeItem.funcType;
@@ -2867,8 +2867,8 @@ export class fx {
                     }
                   }
 
-                  var bodydataVar = bodyArray[0];
-                  var bodydataView = fx.createVariableBody(
+                  let bodydataVar = bodyArray[0];
+                  let bodydataView = fx.createVariableBody(
                     bodyView,
                     bodydataVar
                   );
@@ -2996,9 +2996,9 @@ export class fx {
   };
 
   static currencyConversion = function (value: number): number[] {
-    var copperCoin = value % 100;
-    var silverCoin = parseInt(String((value / 100) % 100));
-    var goldCoin = 0;
+    const copperCoin = value % 100;
+    const silverCoin = parseInt(String((value / 100) % 100));
+    let goldCoin = 0;
     if (value < 100000) {
       goldCoin = parseInt(String((value / 100 / 100) % 100));
     } else {
@@ -3018,9 +3018,9 @@ export class fx {
     clickBody: any,
     index: number
   ): any {
-    var body = clickBody.copy();
+    const body = clickBody.copy();
     parent.replace(body, index);
-    var backView = null;
+    let backView = null;
     fx.Call.send(
       fx.Eve.SHIFT_ADD_VARIABLEBODY,
       [parent, body],
@@ -3038,9 +3038,9 @@ export class fx {
    * @returns {*}
    */
   static createVariableBody = function (parent: any, clickBody: any): any {
-    var body = clickBody.copy();
+    const body = clickBody.copy();
     parent.addBody(body);
-    var backView = null;
+    let backView = null;
     fx.Call.send(
       fx.Eve.SHIFT_ADD_VARIABLEBODY,
       [parent, body],
@@ -3058,9 +3058,9 @@ export class fx {
    * @returns {*}
    */
   static createFunctionBody = function (parent: any, clickBody: any): any {
-    var body = clickBody.copy();
+    const body = clickBody.copy();
     parent.addBody(body);
-    var backView = null;
+    let backView = null;
     fx.Call.send(
       fx.Eve.SHIFT_ADD_FUNCTION,
       [parent, body],
@@ -3082,9 +3082,9 @@ export class fx {
     clickBody: any,
     index: number
   ): any {
-    var body = clickBody.copy();
+    const body = clickBody.copy();
     parent.replace(body, index);
-    var backView = null;
+    let backView = null;
     fx.Call.send(
       fx.Eve.SHIFT_ADD_FUNCTION,
       [parent, body],
@@ -3110,7 +3110,7 @@ export class fx {
     isAdvance: boolean,
     funcType: any
   ): any {
-    var body = new fx.OperationBody();
+    const body = new fx.OperationBody();
     body.isFunction = !!type;
     fx.targetStoragePool.push(body);
     body.isWeight = isWeight;
@@ -3119,7 +3119,7 @@ export class fx {
     if (body.funcType == undefined || body.funcType == null) body.funcType = 0;
     body.x = x;
     body.y = y;
-    var backView = null;
+    let backView = null;
     fx.Call.send(
       fx.Eve.SHIFT_ADD_OPERATIONBODY,
       [x, y, type, body],
@@ -3150,7 +3150,7 @@ export class fx {
     height: number,
     text: string
   ): any {
-    var body = new fx.Bookmark();
+    const body = new fx.Bookmark();
     body.x = x;
     body.y = y;
     body.width = width;
@@ -3164,7 +3164,7 @@ export class fx {
     }
     body.text = text;
     fx.targetStoragePool.push(body);
-    var backView = null;
+    let backView = null;
     fx.Call.send(
       fx.Eve.SHIFT_ADD_BOOKMARK,
       [body],
@@ -3191,7 +3191,7 @@ export class fx {
     isWeight: boolean,
     funcType: any
   ): any {
-    var body = new fx.SymbolBody();
+    const body = new fx.SymbolBody();
     body.isWeight = isWeight;
     body.isFunctionId = fid;
     body.funcType = funcType;
@@ -3261,7 +3261,7 @@ export class fx {
     tree: any[],
     stageShow: any
   ): void {
-    for (var i = 0; i < tree.length; i++) {
+    for (let i = 0; i < tree.length; i++) {
       const treeItem = tree[i];
       switch (treeItem.type) {
         case "OperationBody":
@@ -3292,7 +3292,7 @@ export class fx {
                     new Date().getTime() + fx.functionAddIndex;
                   fx.functionAddIndex++;
                 }
-                var bodydataView = fx.createFunctionBody(
+                let bodydataView = fx.createFunctionBody(
                   operationBody,
                   bodydata
                 );
@@ -3329,7 +3329,7 @@ export class fx {
                     new Date().getTime() + fx.functionAddIndex;
                   fx.functionAddIndex++;
                 }
-                var bodydataView = fx.createFunctionBody(operationBody, bodydata);
+                let bodydataView = fx.createFunctionBody(operationBody, bodydata);
 
                 bodydataView.enemyFlag = treeTreeItem.enemy;
                 bodydataView.funcType = treeTreeItem.funcType;
@@ -3355,14 +3355,14 @@ export class fx {
                 bodydataView.step = treeTreeItem.step;
                 bodydataView.logicalChildArray = [];
                 treeTreeItem.logicalChildArray.forEach((variable) => {
-                  var bodyArray = [];
+                  const bodyArray = [];
                   fx.getLibraryBody(
                     bodyArray,
                     fx.targetFolder.tree,
                     fx.getAbsoluteAddress(variable)
                   );
-                  var bodydataCp = bodyArray[0] as any;
-                  var bodydataViewCp = (bodydataCp as any).copy();
+                  const bodydataCp = bodyArray[0] as any;
+                  const bodydataViewCp = (bodydataCp as any).copy();
 
                   bodydataViewCp.enemyFlag = treeTreeItem.enemy;
                   bodydataViewCp.funcType = treeTreeItem.funcType;
@@ -3387,8 +3387,8 @@ export class fx {
                   fx.targetFolder.tree,
                   fx.getAbsoluteAddress(treeTreeItem)
                 );
-                var bodydataVar = bodyArray[0] as any;
-                var bodydataView = fx.createVariableBody(
+                let bodydataVar = bodyArray[0] as any;
+                let bodydataView = fx.createVariableBody(
                   operationBody,
                   bodydataVar
                 );
@@ -3445,7 +3445,7 @@ export class fx {
                     new Date().getTime() + fx.functionAddIndex;
                   fx.functionAddIndex++;
                 }
-                var bodydataView = fx.createFunctionBody(
+                let bodydataView = fx.createFunctionBody(
                   operationBody,
                   bodydata
                 );
@@ -3481,7 +3481,7 @@ export class fx {
                     new Date().getTime() + fx.functionAddIndex;
                   fx.functionAddIndex++;
                 }
-                var bodydataView = fx.createFunctionBody(operationBody, bodydata);
+                let bodydataView = fx.createFunctionBody(operationBody, bodydata);
 
                 bodydataView.enemyFlag = treeTreeItem.enemy;
                 bodydataView.funcType = treeTreeItem.funcType;
@@ -3507,14 +3507,14 @@ export class fx {
                 bodydataView.step = treeTreeItem.step;
                 bodydataView.logicalChildArray = [];
                 treeTreeItem.logicalChildArray.forEach((variable) => {
-                  var bodyArray = [];
+                  const bodyArray = [];
                   fx.getLibraryBody(
                     bodyArray,
                     fx.targetFolder.tree,
                     fx.getAbsoluteAddress(variable)
                   );
-                  var bodydataCp = bodyArray[0] as any;
-                  var bodydataViewCp = (bodydataCp as any).copy();
+                  const bodydataCp = bodyArray[0] as any;
+                  const bodydataViewCp = (bodydataCp as any).copy();
 
                   bodydataViewCp.enemyFlag = treeTreeItem.enemy;
                   bodydataViewCp.funcType = treeTreeItem.funcType;
@@ -3539,8 +3539,8 @@ export class fx {
                   fx.targetFolder.tree,
                   fx.getAbsoluteAddress(treeTreeItem)
                 );
-                var bodydataVar = bodyArray[0] as any;
-                var bodydataView = fx.createVariableBody(
+                let bodydataVar = bodyArray[0] as any;
+                let bodydataView = fx.createVariableBody(
                   operationBody,
                   bodydataVar
                 );
@@ -3603,10 +3603,10 @@ export class fx {
 
   static saveFXTree = function (tree: any[], codeobj: any[]): void {
     if (tree != null)
-      for (var i = 0; i < tree.length; i++) {
+      for (let i = 0; i < tree.length; i++) {
         const treeItem = tree[i];
         if (treeItem.type == NodeType.Macro) {
-          var code = {
+          const code = {
             TID: treeItem.TID,
             name: treeItem.name,
             code: treeItem.macros,
@@ -3620,13 +3620,13 @@ export class fx {
 
   static recursiveStorage = function (array: any, codeobj: any[]): void {
     if (array.operationArray != null) {
-      for (var i = 0; i < array.operationArray.length; i++) {
+      for (let i = 0; i < array.operationArray.length; i++) {
         const arrayOperationItem = array.operationArray[i];
         if (arrayOperationItem.tree != null) {
-          for (var j = 0; j < arrayOperationItem.tree.length; j++) {
+          for (let j = 0; j < arrayOperationItem.tree.length; j++) {
             const arrayOperationItemTreeItem = arrayOperationItem.tree[j];
             if (arrayOperationItemTreeItem.type == NodeType.Macro) {
-              var code = {
+              const code = {
                 TID: arrayOperationItemTreeItem.TID,
                 name: arrayOperationItemTreeItem.name,
                 code: arrayOperationItemTreeItem.macros,
