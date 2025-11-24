@@ -28,14 +28,14 @@ export class SheetData {
    * 支持普通值、函数和公式的计算
    * @returns 返回单元格的值，如果无法获取则返回 0
    */
-  getValue(name, row, col): number {
+  getValue(name: any, row: any, col: any): number {
     if (
       !this?.originData ||
       typeof name === "undefined" ||
       typeof row === "undefined" ||
       typeof col === "undefined"
     ) {
-      return undefined;
+      return 0;
     }
 
     const data = this.originData;

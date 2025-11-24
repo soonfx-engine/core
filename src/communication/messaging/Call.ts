@@ -36,7 +36,7 @@ export class Call {
           i
         ].execute(type, message);
         if (fun) {
-          fun.apply([type], [value]);
+          fun.apply([type], [value] as any);
         }
       }
     }

@@ -371,7 +371,7 @@ export class Player {
 
         this.enemyBody = target;
         damage = this.playerData!.formulaTree[i].body.getValue();
-        let isDie = target.isDie;
+        const isDie = target.isDie;
         if (target.getShield() != 0) {
           target.minusShield(damage);
         } else {
@@ -391,7 +391,7 @@ export class Player {
           fx.enemyBody = target;
           this.enemyBody = target;
           damage = fx.stageStoragePool[i].body.getValue();
-          let isDie = target.isDie;
+          const isDie = target.isDie;
           if (target.getShield() != 0) {
             target.minusShield(damage);
           } else {
@@ -434,7 +434,7 @@ export class Player {
    * 如果经验值满足条件，则升级并触发升级事件
    */
   checkUpdateLevel(): void {
-    let needExp = this.getNeedExp();
+    const needExp = this.getNeedExp();
     if (this.exp >= needExp && this.level < this.maxLEvel) {
       this.level++;
       this.exp = 0;
@@ -724,15 +724,15 @@ export class Player {
   dispose(): void {
     this.callCenter!.dispose();
     this.playerData!.dispose();
-    this.name = null
-    this.hp = null;
-    this.maxHp = null;
+    this.name = "";
+    this.hp = 0;
+    this.maxHp = 0;
     this.playerData = null;
     this.callCenter = null;
-    this.tagArray = null;
-    this.id = null;
-    this.constructorName = null;
-    this.attackNum = null;
+    this.tagArray = [];
+    this.id = 0;
+    this.constructorName = "";
+    this.attackNum = 0;
   }
 
   /**

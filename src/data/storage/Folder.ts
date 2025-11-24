@@ -37,7 +37,7 @@ export class Folder {
    * 创建文件夹实例
    * @param name - 文件夹名称，可选参数
    */
-  constructor(name: string = null) {
+  constructor(name: string | null = null) {
     // 设置名称
     this.name = name;
     // ID
