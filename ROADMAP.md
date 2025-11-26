@@ -1,6 +1,6 @@
 # SoonFx Engine Code Roadmap
 
-## 🧪 v2.1 - Quality & Testing
+## 🧪 v2.0.1 - Quality & Testing
 
 - [ ] Add Vitest testing framework
 - [ ] Unit tests for core math functions (`distance`, `mix`, `dot`, `cross`)
@@ -8,7 +8,7 @@
 - [ ] Add ESLint + Prettier configuration
 - [ ] Target test coverage > 60%
 
-## 🔧 v2.2 - System.ts Refactoring
+## 🔧 v2.0.2 - System.ts Refactoring
 
 - [ ] Extract `MathUtils` module (vector/distance/interpolation)
 - [ ] Extract `ExpressionParser` module (RPN/evaluation)
@@ -16,21 +16,21 @@
 - [ ] Extract `Serializer` module (save/load)
 - [ ] Maintain backward API compatibility
 
-## 📝 v2.3 - Type System Enhancement
+## 📝 v2.0.3 - Type System Enhancement
 
 - [ ] Eliminate all `any` types
 - [ ] Define complete interface system
 - [ ] Add comprehensive JSDoc comments
 - [ ] Export complete type definitions
 
-## 🏗️ v2.4 - Module Optimization
+## 🏗️ v2.0.4 - Module Optimization
 
 - [ ] Refactor `BasicBody.ts` (1,591 lines → split)
 - [ ] Optimize `VariableValue.ts`
 - [ ] Refactor `Player.ts`
 - [ ] Improve event system
 
-## 🚀 v3.0 - Architecture Upgrade
+## 🚀 v2.1.0 - Architecture Upgrade
 
 - [ ] Full modular architecture
 - [ ] Tree-shaking support
