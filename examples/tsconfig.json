@@ -1,26 +1,32 @@
 {
   "compilerOptions": {
-    "target": "esnext",
+    "target": "ES2019",
     "module": "esnext",
     "moduleResolution": "node",
     "allowJs": false,
-    "strict": true,
+    "strict": false,
+    "noImplicitAny": false,
+    "noImplicitThis": false,
+    "strictPropertyInitialization": false,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "declaration": false,
-    "outDir": "./dist",
-    "rootDir": "./",
+    "noEmit": true,
     "baseUrl": ".",
+    "paths": {
+      "@soonfx/engine": ["../src/index.ts"],
+      "@/*": ["src/*"]
+    },
     "resolveJsonModule": true,
-    "allowSyntheticDefaultImports": true,
-     
+    "allowSyntheticDefaultImports": true
   },
   "include": [
-    "src/*.ts" 
+    "src/**/*.ts",
+    "vite.config.ts"
   ],
   "exclude": [
     "node_modules",
     "dist"
   ]
-} 
+}
