@@ -9,7 +9,7 @@
 
 **基于TypeScript开发的 游戏数值计算和公式系统**
 
-[安装](#-安装) · [快速开始](#-快速开始) · [文档](#-核心-api) · [示例项目](docs/examples) · [在线演示](https://soonfx.dev/examples)
+[安装](#-安装) · [快速开始](#-快速开始) · [文档](#-核心-api) · [示例项目](examples) · [路线图](ROADMAP.md) · [在线演示](https://soonfx.dev)
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
@@ -54,7 +54,7 @@ npm install
 npm run build
 
 # 运行示例
-cd docs/examples
+cd examples
 npm install
 npm run dev
 ```
@@ -186,7 +186,7 @@ const coord = fx.coordinate(x, y, angle, distance);
 
 ## 📖 角色属性、战斗数值示例
 
-查看 [示例项目](https://github.com/soonfx-engine/core/tree/main/docs/examples) 获取完整的开发示例。
+查看 [示例项目](https://github.com/soonfx-engine/core/tree/main/examples) 获取完整的开发示例。
 
 ### 示例内容：
 
@@ -254,7 +254,7 @@ cd core
 
 ```bash
 # 进入示例目录
-cd docs/examples
+cd examples
 
 # 安装依赖
 npm install
@@ -279,8 +279,11 @@ npm run build
 npm test
 ```
 
+## 🗺️ 路线图
+
+查看我们的 [路线图](ROADMAP.md) 了解计划中的功能和改进。
+
 ## 📝 更新日志
- 
 
 查看 [完整更新日志](https://github.com/soonfx-engine/core/releases)
 
