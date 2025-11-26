@@ -16,6 +16,7 @@ declare global {
 const globalThis_: any = (function () {
   if (typeof globalThis !== "undefined") return globalThis;
   if (typeof window !== "undefined") return window;
+  // @ts-ignore
   if (typeof global !== "undefined") return global;
   if (typeof self !== "undefined") return self;
   return {};

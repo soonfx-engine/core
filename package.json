@@ -1,36 +1,32 @@
 {
   "name": "@soonfx/engine",
-  "version": "2.0.0",
-  "description": "TypeScript game numeric engine for RPG and strategy games - formula parsing, battle simulation, zero dependencies",
+  "version": "2.0.9",
+  "description": "TypeScript-first game numeric engine for RPG and strategy games - formula parsing, battle simulation, zero dependencies",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
-    "build:types": "tsc",
-    "build": "npm run build:esm && npm run build:cjs",
-    "build:esm": "esbuild src/index.ts --bundle --format=esm --platform=node --packages=external --outfile=build/fx/lib/index.mjs",
-    "build:cjs": "esbuild src/index.ts --bundle --format=cjs --packages=external --outfile=build/fx/lib/index.js",
-    "build:types-gen": "dts-bundle-generator --umd-module-name fx -o build/fx/lib/index.d.ts src/index.ts",
-    "build:types-global": "npm run build:types-gen && node scripts/generate-fx-dts.js",
-    "build:complete": "npm run build",
-    "dev": "esbuild src/index.ts --bundle --format=iife --outfile=bin/fx.js --watch --sourcemap",
-    "verify": "node scripts/verify-package.js",
-    "install:local": "node scripts/install-local.js",
-    "test:local": "cd test-local && npm install && node test.js",
-    "package:prepare": "npm run build:complete && npm run verify",
-    "publish:npm": "npm run verify && node scripts/publish.js",
-    "package:publish": "npm run package:prepare && npm run publish:npm",
-    "package:local": "rimraf --glob \"fx-*.tgz\" && npm run package:prepare && npm run install:local",
-    "p": "rimraf --glob \"*.tgz\" && npm run build:types-gen &&  npm run build && npm run package:tgz && node scripts/copy-to-game.js",
-    "package:tgz": "npm run package:prepare && node scripts/create-tgz.js",
-    "test:tgz": "node scripts/test-tgz.js",
-    "quick:publish": "node scripts/quick-publish.js",
-    "clean": "rimraf --glob \"build/fx/lib/*\" && rimraf test-local test-tgz-install && rimraf --glob \"*.tgz\"",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "pack": "npm pack",
+    "test": "vitest run",
+    "lint": "eslint \"src/**/*.ts\"",
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch"
   },
   "keywords": [
-    "typescript",
-    "javascript",
-    "nodejs",
-    "game-development",
     "game-engine",
+    "typescript",
     "rpg",
     "strategy-game",
     "turn-based",
@@ -40,18 +36,10 @@
     "damage-calculation",
     "numerical-computation",
     "zero-dependency",
-    "type-safe",
-    "lightweight",
-    "cross-platform",
     "game-math",
-    "character-attributes",
-    "game-logic"
+    "character-attributes"
   ],
-  "author": {
-    "name": "SoonFx Team",
-    "email": "jiyisoon@163.com",
-    "url": "https://soonfx.dev/examples"
-  },
+  "author": "SoonFx Team <jiyisoon@163.com> (https://soonfx.dev)",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
@@ -60,36 +48,14 @@
   "bugs": {
     "url": "https://github.com/soonfx-engine/core/issues"
   },
-  "homepage": "https://soonfx.dev/examples",
-  "main": "build/fx/lib/index.mjs",
-  "module": "build/fx/lib/index.mjs",
-  "types": "build/fx/lib/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./build/fx/lib/index.mjs",
-      "require": "./build/fx/lib/index.js",
-      "types": "./build/fx/lib/index.d.ts"
-    }
+  "homepage": "https://soonfx.dev",
+  "engines": {
+    "node": ">=14.0.0"
   },
-  "files": [
-    "build/fx/lib/**/*",
-    "README.MD",
-    "LICENSE"
-  ],
- 
+  "sideEffects": false,
   "devDependencies": {
-    "@swc/cli": "^0.1.62",
-    "@swc/core": "^1.3.78",
-    "@types/node": "^20.5.1",
-    "dts-gen": "^0.10.3",
-    "esbuild": "^0.19.2",
-    "rimraf": "^5.0.1",
-    "typescript": "^5.5.2",
-    "undici-types": "^5.26.5"
-  },
-  "dependencies": {
-    "dts-bundle-generator": "^9.5.1",
-    "tsc": "^2.0.4"
-  },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+    "tsup": "^8.0.0",
+    "typescript": "^5.0.0",
+    "vitest": "^1.0.0"
+  }
 }
