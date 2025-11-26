@@ -11,7 +11,7 @@
 
 **A lightweight, type-safe formula engine designed for game developers who need reliable battle calculations, character attributes, and expression parsing - with zero dependencies.**
 
-[Installation](#-installation) · [Quick Start](#-quick-start) · [Documentation](#-core-api) · [Examples](docs/examples) · [Online Demo](https://soonfx.dev/examples)
+[Installation](#-installation) · [Quick Start](#-quick-start) · [Documentation](#-core-api) · [Examples](examples) · [Roadmap](ROADMAP.md) · [Online Demo](https://soonfx.dev)
 
 [English](README.md) | [简体中文](README.zh-CN.md)
 
@@ -56,7 +56,7 @@ npm install
 npm run build
 
 # Run examples
-cd docs/examples
+cd examples
 npm install
 npm run dev
 ```
@@ -184,7 +184,7 @@ The `Player` class provides character attributes, battle calculations, and comba
 
 ## 📖 Examples
 
-Check out the [example project](https://github.com/soonfx-engine/core/tree/main/docs/examples) for complete development examples.
+Check out the [example project](https://github.com/soonfx-engine/core/tree/main/examples) for complete development examples.
 
 ### Example Contents:
 
@@ -251,7 +251,7 @@ cd core
 
 ```bash
 # Navigate to examples directory
-cd docs/examples
+cd examples
 
 # Install dependencies
 npm install
@@ -276,6 +276,10 @@ npm run build
 npm test
 ```
 
+## 🗺️ Roadmap
+
+See our [Roadmap](ROADMAP.md) for planned features and improvements.
+
 ## 📝 Changelog
 
 View the [complete changelog](https://github.com/soonfx-engine/core/releases)
@@ -288,7 +292,7 @@ This project is licensed under the [Apache 2.0 License](LICENSE). You are free t
 
 - 📦 [npm Package](https://www.npmjs.com/package/@soonfx/engine)
 - 💻 [GitHub Repository](https://github.com/soonfx-engine/core)
-- 📖 [Online Demo](https://soonfx.dev/examples)
+- 📖 [Online Demo](https://soonfx.dev)
 - 🐛 [Issue Tracker](https://github.com/soonfx-engine/core/issues)
 - 💬 [Discussions](https://github.com/soonfx-engine/core/discussions)
 
