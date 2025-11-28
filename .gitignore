@@ -2,3 +2,5 @@ node_modules
 *.tgz 
 dist
 /temp
+package-lock.json
+yarn.lock
