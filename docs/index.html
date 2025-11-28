@@ -47,6 +47,26 @@
             margin-bottom: 0.8rem;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
             text-align: center;
+            position: relative;
+        }
+
+        .lang-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+        }
+
+        .lang-btn:hover {
+            background: var(--accent-color);
+            color: var(--dark-bg);
         }
 
         .header h1 {
@@ -300,7 +320,7 @@
         }
 
         #output:empty::before {
-            content: 'Waiting for simulation...';
+            content: attr(data-placeholder);
             color: #888;
             font-style: italic;
         }
@@ -366,6 +386,11 @@
             .detail-chart-wrapper {
                 height: 180px;
             }
+            
+            .lang-btn {
+                top: 0.5rem;
+                right: 0.5rem;
+            }
         }
 
         /* Story Mode Styles */
@@ -388,39 +413,41 @@
             font-size: 0.85rem;
         }
     </style>
-  <script type="module" crossorigin src="./assets/index-Biuxv-QS.js"></script>
+  <script type="module" crossorigin src="./assets/index-Cb-Gcqw1.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/echarts-Bn9PLWWT.js">
 </head>
 <body>
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <h1>⚔️ Interactive Battle Simulation</h1>
-            <p>Real-time combat data visualization and analysis powered by SoonFx Engine</p>
+            <button id="langSwitch" class="lang-btn" data-i18n="header.langSwitch">中文</button>
+            <h1 data-i18n="header.title">⚔️ Interactive Battle Simulation</h1>
+            <p data-i18n="header.subtitle">Real-time combat data visualization and analysis powered by SoonFx Engine</p>
         </div>
 
         <!-- Main Layout -->
         <div class="main-layout">
             <!-- Scenario Selector -->
             <div class="scenario-panel">
-                <h2>🎮 Battle Scenarios</h2>
+                <h2 data-i18n="scenarios.title">🎮 Battle Scenarios</h2>
                 <div class="scenario-list">
                     <button class="scenario-btn active" data-scenario="pve-growth">
-                        <span class="label">📈 Level Progression (1-50)</span>
-                        <span class="desc">Watch how stats scale across levels</span>
+                        <span class="label" data-i18n="scenarios.pve.label">📈 Level Progression (1-50)</span>
+                        <span class="desc" data-i18n="scenarios.pve.desc">Watch how stats scale across levels</span>
                     </button>
                     <button class="scenario-btn" data-scenario="newbie">
-                        <span class="label">🌱 Newbie Village (Lv 1-10)</span>
-                        <span class="desc">First steps in the adventure</span>
+                        <span class="label" data-i18n="scenarios.newbie.label">🌱 Newbie Village (Lv 1-10)</span>
+                        <span class="desc" data-i18n="scenarios.newbie.desc">First steps in the adventure</span>
                     </button>
                     <button class="scenario-btn" data-scenario="mid-game">
-                        <span class="label">⚔️ Mid-Game Challenge (Lv 20-30)</span>
-                        <span class="desc">Intermediate difficulty battles</span>
+                        <span class="label" data-i18n="scenarios.midgame.label">⚔️ Mid-Game Challenge (Lv 20-30)</span>
+                        <span class="desc" data-i18n="scenarios.midgame.desc">Intermediate difficulty battles</span>
                     </button>
                 </div>
 
                 <div class="info-box" style="margin-top: 1.5rem;">
-                    <strong>💡 Tip:</strong> Click on any data point in the charts to see detailed battle information for that level.
+                    <strong data-i18n="scenarios.tip.label">💡 Tip:</strong>
+                    <span data-i18n="scenarios.tip.text">Click on any data point in the charts to see detailed battle information for that level.</span>
                 </div>
             </div>
 
@@ -428,42 +455,42 @@
             <div class="chart-area">
                 <!-- Story Header -->
                 <div class="story-header" id="storyHeader">
-                    <h3 id="storyTitle">📊 Analyzing Level Progression</h3>
-                    <p id="storyDesc">Simulating 50 battles to show how character stats evolve from novice to master...</p>
+                    <h3 id="storyTitle" data-i18n="story.pveGrowth.title">📊 Analyzing Level Progression</h3>
+                    <p id="storyDesc" data-i18n="story.pveGrowth.desc">Simulating 50 battles to show how character stats evolve from novice to master...</p>
                 </div>
 
                 <!-- HP Chart -->
                 <div class="chart-card">
-                    <h3>❤️ Health Points (HP) by Level</h3>
+                    <h3 data-i18n="charts.hp">❤️ Health Points (HP) by Level</h3>
                     <div class="chart-wrapper">
                         <div id="hpChart" class="chart-container"></div>
                         <div id="hpPlaceholder" class="chart-placeholder">
                             <span class="loading-spinner"></span>
-                            <span style="margin-left: 0.5rem;">Running simulations...</span>
+                            <span style="margin-left: 0.5rem;" data-i18n="charts.loading">Running simulations...</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Damage Chart -->
                 <div class="chart-card">
-                    <h3>💥 Attack Damage by Level</h3>
+                    <h3 data-i18n="charts.damage">💥 Attack Damage by Level</h3>
                     <div class="chart-wrapper">
                         <div id="damageChart" class="chart-container"></div>
                         <div id="damagePlaceholder" class="chart-placeholder">
                             <span class="loading-spinner"></span>
-                            <span style="margin-left: 0.5rem;">Running simulations...</span>
+                            <span style="margin-left: 0.5rem;" data-i18n="charts.loading">Running simulations...</span>
                         </div>
                     </div>
                 </div>
 
                 <!-- Rounds Chart -->
                 <div class="chart-card">
-                    <h3>⏱️ Battle Duration (Rounds) by Level</h3>
+                    <h3 data-i18n="charts.rounds">⏱️ Battle Duration (Rounds) by Level</h3>
                     <div class="chart-wrapper">
                         <div id="roundsChart" class="chart-container"></div>
                         <div id="roundsPlaceholder" class="chart-placeholder">
                             <span class="loading-spinner"></span>
-                            <span style="margin-left: 0.5rem;">Running simulations...</span>
+                            <span style="margin-left: 0.5rem;" data-i18n="charts.loading">Running simulations...</span>
                         </div>
                     </div>
                 </div>
@@ -471,32 +498,38 @@
 
             <!-- Battle Details -->
             <div class="details-panel">
-                <h2>📋 Battle Details</h2>
+                <h2 data-i18n="charts.details.title">📋 Battle Details</h2>
                 
                 <div id="status"></div>
 
                 <!-- Detail Charts -->
                 <div id="detailChartsContainer" style="display: none;">
                     <div class="detail-chart">
-                        <h4>HP Change Over Rounds</h4>
+                        <h4 data-i18n="charts.details.hpChange">HP Change Over Rounds</h4>
                         <div class="detail-chart-wrapper">
                             <div id="detailHpChart" class="chart-container"></div>
                         </div>
                     </div>
 
                     <div class="detail-chart">
-                        <h4>Damage Statistics</h4>
+                        <h4 data-i18n="charts.details.damageStats">Damage Statistics</h4>
                         <div class="detail-chart-wrapper">
                             <div id="detailDamageChart" class="chart-container"></div>
                         </div>
                     </div>
                 </div>
 
-                <div id="output"></div>
+                <div id="output" data-placeholder="Waiting for simulation..."></div>
             </div>
         </div>
     </div>
 
-    <!-- Load battle demo module -->
+    <!-- Load battle demo module -->
+    <script>
+        // Apply initial translation placeholder logic for output
+        document.addEventListener('DOMContentLoaded', () => {
+           // i18n handled by main.ts -> DemoApp -> I18nService
+        });
+    </script>
 </body>
 </html>
