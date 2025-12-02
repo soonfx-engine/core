@@ -10,11 +10,12 @@
             background: rgba(0, 0, 0, 0.3);
             border: 1px solid var(--text-gray);
             color: var(--text-light);
-            padding: 4px 8px;
+            padding: 2px 6px;
             border-radius: 4px;
-            width: 80px;
+            width: 60px;
             float: right;
             transition: border-color 0.2s, box-shadow 0.2s;
+            font-size: 0.8rem;
         }
         .config-input:focus {
             outline: none;
@@ -28,10 +29,10 @@
             background: rgba(255, 255, 255, 0.05);
             border: 1px solid var(--text-gray);
             color: var(--text-gray);
-            padding: 0.4rem 0.7rem;
+            padding: 0.3rem 0.6rem;
             border-radius: 4px;
             cursor: pointer;
-            font-size: 0.75rem;
+            font-size: 0.7rem;
             transition: all 0.2s;
         }
         .preset-btn:hover {
@@ -46,18 +47,18 @@
         }
         .config-section {
             background: rgba(0, 0, 0, 0.15);
-            padding: 0.8rem;
+            padding: 0.5rem;
             border-radius: 8px;
         }
         .start-battle-btn {
             background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
             color: var(--text-light);
             border: 2px solid var(--accent-color);
-            padding: 0.75rem 1.5rem;
+            padding: 0.5rem 1rem;
             border-radius: 8px;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 0.9rem;
+            font-size: 0.85rem;
             font-weight: 600;
             box-shadow: 0 4px 12px rgba(6, 182, 212, 0.4);
         }
@@ -485,13 +486,13 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
-            gap: 1.5rem;
-            padding: 1.5rem;
+            gap: 0.8rem;
+            padding: 0.8rem;
             background: linear-gradient(135deg, rgba(30, 58, 138, 0.2), rgba(124, 58, 237, 0.2));
             border-radius: 12px;
             border: 2px solid rgba(6, 182, 212, 0.3);
             position: relative;
-            min-height: 200px;
+            min-height: 140px;
         }
 
         .character-view {
@@ -499,8 +500,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.8rem;
-            padding: 1rem;
+            gap: 0.5rem;
+            padding: 0.5rem;
             background: rgba(0, 0, 0, 0.2);
             border-radius: 12px;
             transition: all 0.3s ease;
@@ -516,8 +517,8 @@
 
         .character-sprite {
             position: relative;
-            width: 120px;
-            height: 120px;
+            width: 60px;
+            height: 60px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -525,7 +526,7 @@
         }
 
         .character-avatar {
-            font-size: 80px;
+            font-size: 40px;
             filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
             animation: float 3s ease-in-out infinite;
         }
@@ -535,7 +536,7 @@
                 transform: translateY(0);
             }
             50% {
-                transform: translateY(-10px);
+                transform: translateY(-5px);
             }
         }
 
@@ -545,9 +546,9 @@
         }
 
         .character-name {
-            font-size: 1.1rem;
+            font-size: 0.9rem;
             font-weight: 600;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.3rem;
             color: var(--text-light);
         }
 
@@ -560,14 +561,14 @@
         }
 
         .hp-bar-container {
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.3rem;
         }
 
         .hp-bar {
             width: 100%;
-            height: 20px;
+            height: 12px;
             background: rgba(0, 0, 0, 0.5);
-            border-radius: 10px;
+            border-radius: 6px;
             overflow: hidden;
             border: 1px solid rgba(255, 255, 255, 0.2);
             position: relative;
@@ -577,28 +578,28 @@
             height: 100%;
             background: linear-gradient(90deg, #10b981, #34d399);
             transition: width 0.5s ease, background-color 0.3s ease;
-            border-radius: 10px;
+            border-radius: 6px;
         }
 
         .hp-text {
-            font-size: 0.75rem;
+            font-size: 0.65rem;
             color: var(--text-gray);
-            margin-top: 0.2rem;
+            margin-top: 0.1rem;
             font-weight: 500;
         }
 
         .character-stats {
             display: flex;
             justify-content: space-around;
-            gap: 0.5rem;
-            font-size: 0.75rem;
+            gap: 0.3rem;
+            font-size: 0.7rem;
             color: var(--text-gray);
             flex-wrap: wrap;
         }
 
         .character-stats span {
             background: rgba(0, 0, 0, 0.3);
-            padding: 0.2rem 0.5rem;
+            padding: 0.1rem 0.4rem;
             border-radius: 4px;
         }
 
@@ -722,10 +723,10 @@
                     <h3 data-i18n="custom.title">⚙️ Battle Configuration</h3>
                     
                     <!-- Character View -->
-                    <div id="characterViewContainer" style="display: none; margin-bottom: 1rem;"></div>
+                    <div id="characterViewContainer" style="display: none; margin-bottom: 0.5rem;"></div>
                     
                     <!-- Preset Buttons -->
-                    <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;">
+                    <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem; flex-wrap: wrap;">
                         <button class="preset-btn" data-preset="balanced" data-i18n="custom.presets.balanced">⚖️ Balanced</button>
                         <button class="preset-btn" data-preset="heroStrong" data-i18n="custom.presets.heroStrong">💪 Strong Hero</button>
                         <button class="preset-btn" data-preset="enemyStrong" data-i18n="custom.presets.enemyStrong">👹 Strong Enemy</button>
@@ -733,10 +734,10 @@
                         <button class="preset-btn" data-preset="glass" data-i18n="custom.presets.glass">🗡️ Glass Cannon</button>
                     </div>
 
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
                         <div class="config-section">
-                            <h4 style="margin-bottom: 0.5rem; color: var(--accent-color);" data-i18n="custom.hero">🦸 Hero</h4>
-                            <div style="display: grid; gap: 0.5rem;">
+                            <h4 style="margin-bottom: 0.3rem; color: var(--accent-color);" data-i18n="custom.hero">🦸 Hero</h4>
+                            <div style="display: grid; gap: 0.3rem;">
                                 <label><span data-i18n="custom.level">Level</span>: <input type="number" id="heroLevel" value="10" min="1" max="100" class="config-input"></label>
                                 <label><span data-i18n="custom.hp">HP</span>: <input type="number" id="heroHp" value="1000" min="1" max="999999" class="config-input"></label>
                                 <label><span data-i18n="custom.attack">Attack</span>: <input type="number" id="heroAtk" value="100" min="1" max="99999" class="config-input"></label>
@@ -744,8 +745,8 @@
                             </div>
                         </div>
                         <div class="config-section">
-                            <h4 style="margin-bottom: 0.5rem; color: var(--danger-color);" data-i18n="custom.enemy">👹 Enemy</h4>
-                            <div style="display: grid; gap: 0.5rem;">
+                            <h4 style="margin-bottom: 0.3rem; color: var(--danger-color);" data-i18n="custom.enemy">👹 Enemy</h4>
+                            <div style="display: grid; gap: 0.3rem;">
                                 <label><span data-i18n="custom.level">Level</span>: <input type="number" id="enemyLevel" value="10" min="1" max="100" class="config-input"></label>
                                 <label><span data-i18n="custom.hp">HP</span>: <input type="number" id="enemyHp" value="1000" min="1" max="999999" class="config-input"></label>
                                 <label><span data-i18n="custom.attack">Attack</span>: <input type="number" id="enemyAtk" value="90" min="1" max="99999" class="config-input"></label>
@@ -753,7 +754,7 @@
                             </div>
                         </div>
                     </div>
-                    <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
+                    <div style="margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
                         <div style="display: flex; align-items: center; gap: 0.5rem;">
                              <span data-i18n="custom.simCount">Simulations:</span>
                              <input type="number" id="simCount" value="1" min="1" max="1000" class="config-input" style="float: none; width: 70px;">
@@ -772,7 +773,7 @@
 
                 <!-- HP Chart -->
                 <div class="chart-card">
-                    <h3 data-i18n="charts.hp">❤️ Health Points (HP) by Level</h3>
+                    <h3 id="hpChartTitle" data-i18n="charts.hpByLevel">❤️ Health Points (HP) by Level</h3>
                     <div class="chart-wrapper">
                         <div id="hpChart" class="chart-container"></div>
                         <div id="hpPlaceholder" class="chart-placeholder">
@@ -784,7 +785,7 @@
 
                 <!-- Damage Chart -->
                 <div class="chart-card">
-                    <h3 data-i18n="charts.damage">💥 Attack Damage by Level</h3>
+                    <h3 id="damageChartTitle" data-i18n="charts.damageByLevel">💥 Attack Damage by Level</h3>
                     <div class="chart-wrapper">
                         <div id="damageChart" class="chart-container"></div>
                         <div id="damagePlaceholder" class="chart-placeholder">
@@ -796,7 +797,7 @@
 
                 <!-- Rounds Chart -->
                 <div class="chart-card">
-                    <h3 data-i18n="charts.rounds">⏱️ Battle Duration (Rounds) by Level</h3>
+                    <h3 id="roundsChartTitle" data-i18n="charts.roundsByLevel">⏱️ Battle Duration (Rounds) by Level</h3>
                     <div class="chart-wrapper">
                         <div id="roundsChart" class="chart-container"></div>
                         <div id="roundsPlaceholder" class="chart-placeholder">

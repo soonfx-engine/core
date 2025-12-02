@@ -187,7 +187,7 @@ export class CharacterView {
                 return;
             }
 
-            const sprite = attackerEl.querySelector('.character-sprite');
+            const sprite = attackerEl.querySelector('.character-sprite') as HTMLElement | null;
             if (!sprite) {
                 resolve();
                 return;
@@ -230,7 +230,7 @@ export class CharacterView {
         damageText.textContent = `-${Math.round(damage)}`;
         damageText.style.position = 'absolute';
         damageText.style.color = '#ef4444';
-        damageText.style.fontSize = '24px';
+        damageText.style.fontSize = '18px';
         damageText.style.fontWeight = 'bold';
         damageText.style.pointerEvents = 'none';
         damageText.style.zIndex = '1000';
