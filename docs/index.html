@@ -74,6 +74,25 @@
             cursor: not-allowed;
             transform: none;
         }
+        .start-battle-btn.running {
+            background: linear-gradient(135deg, #ef4444, #f97316);
+            border-color: #ef4444;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5);
+            animation: pulse-battle 1.5s ease-in-out infinite;
+            cursor: wait;
+        }
+        .start-battle-btn.running:hover {
+            transform: none;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5);
+        }
+        @keyframes pulse-battle {
+            0%, 100% {
+                box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5);
+            }
+            50% {
+                box-shadow: 0 4px 20px rgba(239, 68, 68, 0.8);
+            }
+        }
         * {
             margin: 0;
             padding: 0;
@@ -225,6 +244,23 @@
 
         .scenario-btn.active .desc {
             color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Custom Battle Special Style */
+        .scenario-btn[data-scenario="custom-battle"] {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.4), rgba(234, 88, 12, 0.4));
+            border: 2px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .scenario-btn[data-scenario="custom-battle"]:hover {
+            border-color: var(--warning-color);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+        }
+
+        .scenario-btn[data-scenario="custom-battle"].active {
+            background: linear-gradient(135deg, #f59e0b, #ea580c);
+            border-color: var(--warning-color);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.6);
         }
 
         /* Chart Area */
@@ -670,7 +706,7 @@
             }
         }
     </style>
-  <script type="module" crossorigin src="./assets/index-DZOXA8aU.js"></script>
+  <script type="module" crossorigin src="./assets/index-DcBCjvam.js"></script>
   <link rel="modulepreload" crossorigin href="./assets/echarts-Bn9PLWWT.js">
 </head>
 <body>
@@ -688,7 +724,7 @@
             <div class="scenario-panel">
                 <h2 data-i18n="scenarios.title">🎮 Battle Scenarios</h2>
                 <div class="scenario-list">
-                    <button class="scenario-btn active" data-scenario="pve-growth">
+                    <button class="scenario-btn" data-scenario="pve-growth">
                         <span class="label" data-i18n="scenarios.pve.label">📈 Level Progression (1-50)</span>
                         <span class="desc" data-i18n="scenarios.pve.desc">Watch how stats scale across levels</span>
                     </button>
@@ -700,7 +736,7 @@
                         <span class="label" data-i18n="scenarios.midgame.label">⚔️ Mid-Game Challenge (Lv 20-30)</span>
                         <span class="desc" data-i18n="scenarios.midgame.desc">Intermediate difficulty battles</span>
                     </button>
-                    <button class="scenario-btn" data-scenario="custom-battle">
+                    <button class="scenario-btn active" data-scenario="custom-battle">
                         <span class="label" data-i18n="scenarios.custom.label">🔧 Custom Simulation</span>
                         <span class="desc" data-i18n="scenarios.custom.desc">Adjust stats and fight!</span>
                     </button>
