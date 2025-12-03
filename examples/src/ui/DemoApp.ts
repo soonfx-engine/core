@@ -1,6 +1,8 @@
 import { ChartController } from "./ChartController";
 import { CharacterView } from "./CharacterView";
 import { i18n } from "../i18n/I18nService";
+import FxUtil from "../utils/FxUtil";
+import { initFx } from "../core/SimulationService";
 
 const SCENARIO_KEYS: { [key: string]: { title: string, desc: string } } = {
     'pve-growth': {
@@ -557,6 +559,22 @@ ${i18n.t('status.battleDetails.hp', { hp: Math.round(lastResult.battleData[lastR
         const battleData: any[] = [];
         let round = 0;
         const maxRounds = 100;
+        await initFx();
+        // 使用 FxUtil 获取英雄和敌人的属性数据
+        const seerUtil = FxUtil.getInstance();
+        const heroData = seerUtil.getInstanceDataByNameAndOccuAndLevel("主角1", 1, hero.level);
+        const enemyData = seerUtil.getInstanceDataByNameAndOccuAndLevel("怪物1", 1, enemy.level);
+
+        // 更新 hero 和 enemy 的属性
+        hero.attack = heroData.attack;
+        hero.defense = heroData.defense;
+        hero.maxHp = heroData.hp;
+        hero.currentHp = heroData.hp;
+
+        enemy.attack = enemyData.attack;
+        enemy.defense = enemyData.defense;
+        enemy.maxHp = enemyData.hp;
+        enemy.currentHp = enemyData.hp;
 
         // 初始化血量显示
         this.characterView.updateHp(hero.currentHp, hero.maxHp, 'hero');
