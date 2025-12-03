@@ -65,6 +65,7 @@ export const en = {
   custom: {
     title: "⚙️ Battle Configuration",
     start: "Start Battle",
+    stop: "Stop Battle",
     running: "Fighting...",
     simCount: "Simulations:",
     hero: "🦸 Hero",
@@ -93,6 +94,8 @@ export const en = {
   status: {
     running: "🔄 Running {scenario} simulation...",
     simulating: "🔄 Simulating battles... {current}/{total} ({percent}%)",
+    stopping: "⏹️ Stopping battle...",
+    stopped: "⏹️ Battle stopped",
     success: "✅ Simulation complete! Click on any chart point to see detailed battle data.",
     error: "❌ Simulation failed: {message}",
     cannotModifyLevel: "⚠️ Cannot modify level during battle!",
@@ -173,6 +176,7 @@ export const zhCN = {
   custom: {
     title: "⚙️ 战斗配置",
     start: "开始战斗",
+    stop: "停止战斗",
     running: "战斗中...",
     simCount: "模拟次数:",
     hero: "🦸 英雄",
@@ -201,6 +205,8 @@ export const zhCN = {
   status: {
     running: "🔄 正在运行 {scenario} 模拟...",
     simulating: "🔄 正在模拟战斗... {current}/{total} ({percent}%)",
+    stopping: "⏹️ 正在停止战斗...",
+    stopped: "⏹️ 战斗已停止",
     success: "✅ 模拟完成！点击图表上的任意点查看详细战斗数据。",
     error: "❌ 模拟失败: {message}",
     cannotModifyLevel: "⚠️ 战斗中不能修改等级！",

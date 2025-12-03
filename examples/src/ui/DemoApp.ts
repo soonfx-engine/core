@@ -111,8 +111,13 @@ export class DemoApp {
             startCustomBtn.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                console.log('Start Custom Battle clicked');
-                if (!this.isRunning) {
+                if (this.isRunning) {
+                    // Stop battle
+                    console.log('Stop Battle clicked');
+                    this.stopBattle();
+                } else {
+                    // Start battle
+                    console.log('Start Custom Battle clicked');
                     this.runCustomBattle();
                 }
             });
@@ -435,11 +440,11 @@ export class DemoApp {
         this.setStatus('loading', i18n.t('status.running', { scenario: 'Custom' }));
         this.clearOutput();
 
-        // Update button state to show running
+        // Update button state to show stop option
         const startBtn = document.getElementById('startCustomBattle');
         if (startBtn) {
             startBtn.classList.add('running');
-            startBtn.querySelector('.label')!.textContent = '⚔️ ' + i18n.t('custom.running');
+            startBtn.querySelector('.label')!.textContent = '⏹️ ' + i18n.t('custom.stop');
         }
 
         // Show and update character view
@@ -486,6 +491,7 @@ export class DemoApp {
                 // Check if should stop
                 if (this.shouldStop) {
                     console.log('Simulation stopped by user');
+                    this.setStatus('success', i18n.t('status.stopped'));
                     return;
                 }
 
@@ -515,6 +521,7 @@ export class DemoApp {
                     // Check if stopped during animation
                     if (this.shouldStop) {
                         console.log('Simulation stopped during battle animation');
+                        this.setStatus('success', i18n.t('status.stopped'));
                         return;
                     }
                 } else {
@@ -619,12 +626,16 @@ ${i18n.t('status.battleDetails.hp', { hp: Math.round(lastResult.battleData[lastR
              if (progressContainer) progressContainer.style.display = 'none';
         } finally {
             this.isRunning = false;
+            this.shouldStop = false;
             // Reset button state
             const startBtn = document.getElementById('startCustomBattle');
             if (startBtn) {
                 startBtn.classList.remove('running');
                 startBtn.querySelector('.label')!.textContent = '⚔️ ' + i18n.t('custom.start');
             }
+            // Hide progress bar
+            const progressContainer = document.getElementById('customProgress');
+            if (progressContainer) progressContainer.style.display = 'none';
         }
     }
 
@@ -901,6 +912,15 @@ ${i18n.t('status.battleDetails.footer')}
 `;
             outputEl.textContent = details;
         }
+    }
+
+    private stopBattle() {
+        if (!this.isRunning) return;
+        
+        this.shouldStop = true;
+        this.setStatus('loading', i18n.t('status.stopping'));
+        
+        // Button will be reset when the battle loop detects shouldStop
     }
 
     private levelWarningToast: HTMLElement | null = null;
