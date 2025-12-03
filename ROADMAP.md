@@ -22,6 +22,11 @@
 - [ ] Refactor `Player.ts`
 - [ ] Improve event system
 
+## 📚 v2.0.4 - Documentation
+
+- [ ] Complete Chinese documentation
+- [ ] Complete English documentation
+
 ## 🚀 v2.1.0 - Architecture Upgrade
 
 - [ ] Full modular architecture
