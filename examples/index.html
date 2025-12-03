@@ -17,6 +17,46 @@
             transition: border-color 0.2s, box-shadow 0.2s;
             font-size: 0.8rem;
         }
+        .config-label {
+            color: var(--text-light);
+            padding: 2px 6px;
+            width: 60px;
+            float: right;
+            text-align: right;
+            font-size: 0.8rem;
+        }
+        .config-slider {
+            flex: 1;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+        }
+        .config-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .config-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 8px rgba(6, 182, 212, 0.6);
+        }
+        .config-slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
         .config-input:focus {
             outline: none;
             border-color: var(--accent-color);
@@ -137,10 +177,15 @@
             position: relative;
         }
 
-        .lang-btn {
+        .header-btns {
             position: absolute;
             top: 1rem;
             right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .lang-btn, .github-btn {
             background: rgba(255, 255, 255, 0.1);
             border: 1px solid var(--accent-color);
             color: var(--accent-color);
@@ -149,11 +194,21 @@
             cursor: pointer;
             font-size: 0.8rem;
             transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
         }
 
-        .lang-btn:hover {
+        .lang-btn:hover, .github-btn:hover {
             background: var(--accent-color);
             color: var(--dark-bg);
+        }
+
+        .github-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
         }
 
         .header h1 {
@@ -378,6 +433,12 @@
             border: 1px solid var(--danger-color);
         }
 
+        .status.warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning-color);
+            border: 1px solid var(--warning-color);
+        }
+
         .detail-chart {
             background: rgba(0, 0, 0, 0.2);
             border-radius: 8px;
@@ -491,9 +552,13 @@
                 height: 180px;
             }
             
-            .lang-btn {
+            .header-btns {
                 top: 0.5rem;
                 right: 0.5rem;
+            }
+            
+            .github-btn span {
+                display: none;
             }
         }
 
@@ -711,7 +776,13 @@
     <div class="container">
         <!-- Header -->
         <div class="header">
-            <button id="langSwitch" class="lang-btn" data-i18n="header.langSwitch">中文</button>
+            <div class="header-btns">
+                <a href="https://github.com/FelixChristian011226/SoonFxMain" target="_blank" class="github-btn" title="GitHub Repository">
+                    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                    <span>GitHub</span>
+                </a>
+                <button id="langSwitch" class="lang-btn" data-i18n="header.langSwitch">中文</button>
+            </div>
             <h1 data-i18n="header.title">⚔️ Interactive Battle Simulation</h1>
             <p data-i18n="header.subtitle">Real-time combat data visualization and analysis powered by SoonFx Engine</p>
         </div>
@@ -774,27 +845,30 @@
                         <div class="config-section">
                             <h4 style="margin-bottom: 0.3rem; color: var(--accent-color);" data-i18n="custom.hero">🦸 Hero</h4>
                             <div style="display: grid; gap: 0.3rem;">
-                                <label><span data-i18n="custom.level">Level</span>: <input type="number" id="heroLevel" value="10" min="1" max="100" class="config-input"></label>
-                                <label><span data-i18n="custom.hp">HP</span>: <input type="number" id="heroHp" value="1000" min="1" max="999999" class="config-input"></label>
-                                <label><span data-i18n="custom.attack">Attack</span>: <input type="number" id="heroAtk" value="100" min="1" max="99999" class="config-input"></label>
-                                <label><span data-i18n="custom.defense">Defense</span>: <input type="number" id="heroDef" value="20" min="0" max="99999" class="config-input"></label>
+                                <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <span data-i18n="custom.level">Level</span>:
+                                    <input type="range" id="heroLevel" value="10" min="1" max="100" class="config-slider">
+                                    <span id="heroLevelValue" class="config-label" style="width: 30px;">10</span>
+                                </label>
+                                <label><span data-i18n="custom.hp">HP</span>: <span id="heroHp" class="config-label">--</span></label>
+                                <label><span data-i18n="custom.attack">Attack</span>: <span id="heroAtk" class="config-label">--</span></label>
                             </div>
                         </div>
                         <div class="config-section">
                             <h4 style="margin-bottom: 0.3rem; color: var(--danger-color);" data-i18n="custom.enemy">👹 Enemy</h4>
                             <div style="display: grid; gap: 0.3rem;">
-                                <label><span data-i18n="custom.level">Level</span>: <input type="number" id="enemyLevel" value="10" min="1" max="100" class="config-input"></label>
-                                <label><span data-i18n="custom.hp">HP</span>: <input type="number" id="enemyHp" value="1000" min="1" max="999999" class="config-input"></label>
-                                <label><span data-i18n="custom.attack">Attack</span>: <input type="number" id="enemyAtk" value="90" min="1" max="99999" class="config-input"></label>
-                                <label><span data-i18n="custom.defense">Defense</span>: <input type="number" id="enemyDef" value="15" min="0" max="99999" class="config-input"></label>
+                                <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <span data-i18n="custom.level">Level</span>:
+                                    <input type="range" id="enemyLevel" value="10" min="1" max="100" class="config-slider">
+                                    <span id="enemyLevelValue" class="config-label" style="width: 30px;">10</span>
+                                </label>
+                                <label><span data-i18n="custom.hp">HP</span>: <span id="enemyHp" class="config-label">--</span></label>
+                                <label><span data-i18n="custom.attack">Attack</span>: <span id="enemyAtk" class="config-label">--</span></label>
                             </div>
                         </div>
                     </div>
-                    <div style="margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 0.5rem;">
-                        <div style="display: flex; align-items: center; gap: 0.5rem;">
-                             <span data-i18n="custom.simCount">Simulations:</span>
-                             <input type="number" id="simCount" value="1" min="1" max="1000" class="config-input" style="float: none; width: 70px;">
-                        </div>
+                    <div style="margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: flex-end;">
+                        <input type="hidden" id="simCount" value="1">
                         <button id="startCustomBattle" class="start-battle-btn" style="width: auto; padding: 0.6rem 1.5rem;">
                             <span class="label" data-i18n="custom.start">⚔️ Start Battle</span>
                         </button>

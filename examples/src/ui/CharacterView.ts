@@ -39,7 +39,6 @@ export class CharacterView {
                         <div class="character-stats" id="heroStats">
                             <span>Lv.10</span>
                             <span>ATK: 100</span>
-                            <span>DEF: 20</span>
                         </div>
                     </div>
                 </div>
@@ -59,7 +58,6 @@ export class CharacterView {
                         <div class="character-stats" id="enemyStats">
                             <span>Lv.10</span>
                             <span>ATK: 90</span>
-                            <span>DEF: 15</span>
                         </div>
                     </div>
                 </div>
@@ -90,7 +88,6 @@ export class CharacterView {
             heroStatsEl.innerHTML = `
                 <span>Lv.${hero.level || 1}</span>
                 <span>ATK: ${hero.attack || 0}</span>
-                <span>DEF: ${hero.defense || 0}</span>
             `;
         }
 
@@ -98,7 +95,6 @@ export class CharacterView {
             enemyStatsEl.innerHTML = `
                 <span>Lv.${enemy.level || 1}</span>
                 <span>ATK: ${enemy.attack || 0}</span>
-                <span>DEF: ${enemy.defense || 0}</span>
             `;
         }
 

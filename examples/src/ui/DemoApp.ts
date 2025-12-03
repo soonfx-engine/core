@@ -138,6 +138,89 @@ export class DemoApp {
                 i18n.toggleLocale();
             });
         }
+
+        // Level slider events - update stats display and slider value when level changes
+        const heroLevelInput = document.getElementById('heroLevel') as HTMLInputElement;
+        const enemyLevelInput = document.getElementById('enemyLevel') as HTMLInputElement;
+        const heroLevelValue = document.getElementById('heroLevelValue');
+        const enemyLevelValue = document.getElementById('enemyLevelValue');
+        
+        // Store previous values to restore when battle is running
+        let prevHeroLevel = heroLevelInput?.value || '10';
+        let prevEnemyLevel = enemyLevelInput?.value || '10';
+        
+        if (heroLevelInput) {
+            heroLevelInput.addEventListener('input', () => {
+                if (this.isRunning) {
+                    // Restore previous value and show warning
+                    heroLevelInput.value = prevHeroLevel;
+                    this.showLevelWarning();
+                    return;
+                }
+                prevHeroLevel = heroLevelInput.value;
+                if (heroLevelValue) heroLevelValue.textContent = heroLevelInput.value;
+                this.updateStatsDisplay();
+            });
+        }
+        if (enemyLevelInput) {
+            enemyLevelInput.addEventListener('input', () => {
+                if (this.isRunning) {
+                    // Restore previous value and show warning
+                    enemyLevelInput.value = prevEnemyLevel;
+                    this.showLevelWarning();
+                    return;
+                }
+                prevEnemyLevel = enemyLevelInput.value;
+                if (enemyLevelValue) enemyLevelValue.textContent = enemyLevelInput.value;
+                this.updateStatsDisplay();
+            });
+        }
+    }
+
+    /**
+     * 根据等级更新 HP、攻击的显示
+     */
+    private async updateStatsDisplay() {
+        await initFx();
+        const seerUtil = FxUtil.getInstance();
+
+        const heroLevelEl = document.getElementById('heroLevel') as HTMLInputElement;
+        const enemyLevelEl = document.getElementById('enemyLevel') as HTMLInputElement;
+        const heroLevelValue = document.getElementById('heroLevelValue');
+        const enemyLevelValue = document.getElementById('enemyLevelValue');
+        
+        const heroLevel = Math.max(1, Math.min(100, parseInt(heroLevelEl?.value) || 1));
+        const enemyLevel = Math.max(1, Math.min(100, parseInt(enemyLevelEl?.value) || 1));
+
+        // 更新滑条值显示
+        if (heroLevelValue) heroLevelValue.textContent = String(heroLevel);
+        if (enemyLevelValue) enemyLevelValue.textContent = String(enemyLevel);
+
+        try {
+            // 获取英雄数据
+            const heroData = seerUtil.getInstanceDataByNameAndOccuAndLevel("主角1", 1, heroLevel);
+            const heroHpEl = document.getElementById('heroHp');
+            const heroAtkEl = document.getElementById('heroAtk');
+            if (heroHpEl) heroHpEl.textContent = String(Math.round(heroData.hp));
+            if (heroAtkEl) heroAtkEl.textContent = String(Math.round(heroData.attack));
+
+            // 获取敌人数据
+            const enemyData = seerUtil.getInstanceDataByNameAndOccuAndLevel("怪物1", 1, enemyLevel);
+            const enemyHpEl = document.getElementById('enemyHp');
+            const enemyAtkEl = document.getElementById('enemyAtk');
+            if (enemyHpEl) enemyHpEl.textContent = String(Math.round(enemyData.hp));
+            if (enemyAtkEl) enemyAtkEl.textContent = String(Math.round(enemyData.attack));
+
+            // 更新角色视图
+            if (this.characterView && this.currentScenario === 'custom-battle') {
+                this.characterView.updateCharacters(
+                    { name: 'Hero', level: heroLevel, hp: heroData.hp, maxHp: heroData.hp, attack: heroData.attack, defense: heroData.defense },
+                    { name: 'Enemy Boss', level: enemyLevel, hp: enemyData.hp, maxHp: enemyData.hp, attack: enemyData.attack, defense: enemyData.defense }
+                );
+            }
+        } catch (e) {
+            console.error('Failed to update stats display:', e);
+        }
     }
 
     private redirectConsole() {
@@ -247,6 +330,8 @@ export class DemoApp {
                 const characterContainer = document.getElementById('characterViewContainer');
                 if (characterContainer) characterContainer.style.display = 'block';
             }
+            // 初始化属性显示
+            await this.updateStatsDisplay();
             // Auto-start battle when switching to custom-battle
             setTimeout(() => {
                 if (!this.isRunning) {
@@ -295,34 +380,25 @@ export class DemoApp {
         const preset = DemoApp.PRESETS[presetKey];
         if (!preset) return;
 
-        const setValue = (id: string, value: number) => {
-            const el = document.getElementById(id) as HTMLInputElement;
-            if (el) el.value = String(value);
-        };
+        // 只设置等级，其他属性通过公式自动计算
+        const heroLevelEl = document.getElementById('heroLevel') as HTMLInputElement;
+        const enemyLevelEl = document.getElementById('enemyLevel') as HTMLInputElement;
+        
+        if (heroLevelEl) heroLevelEl.value = String(preset.hero.level);
+        if (enemyLevelEl) enemyLevelEl.value = String(preset.enemy.level);
 
-        setValue('heroLevel', preset.hero.level);
-        setValue('heroHp', preset.hero.hp);
-        setValue('heroAtk', preset.hero.atk);
-        setValue('heroDef', preset.hero.def);
-
-        setValue('enemyLevel', preset.enemy.level);
-        setValue('enemyHp', preset.enemy.hp);
-        setValue('enemyAtk', preset.enemy.atk);
-        setValue('enemyDef', preset.enemy.def);
-
-        // Update character view if visible
-        if (this.characterView && this.currentScenario === 'custom-battle') {
-            this.characterView.updateCharacters(
-                { name: 'Hero', level: preset.hero.level, hp: preset.hero.hp, maxHp: preset.hero.hp, attack: preset.hero.atk, defense: preset.hero.def },
-                { name: 'Enemy Boss', level: preset.enemy.level, hp: preset.enemy.hp, maxHp: preset.enemy.hp, attack: preset.enemy.atk, defense: preset.enemy.def }
-            );
-        }
+        // 触发更新显示（会自动更新 HP、攻击、防御和角色视图）
+        this.updateStatsDisplay();
     }
 
     private async runCustomBattle() {
         console.log('runCustomBattle called, isRunning:', this.isRunning);
         if (this.isRunning) return;
         
+        // 初始化 FxUtil
+        await initFx();
+        const seerUtil = FxUtil.getInstance();
+
         const getValue = (id: string) => {
             const el = document.getElementById(id) as HTMLInputElement;
             const val = parseInt(el?.value) || 0;
@@ -332,15 +408,20 @@ export class DemoApp {
         };
 
         const heroLevel = getValue('heroLevel');
-        const heroHp = getValue('heroHp');
-        const heroAtk = getValue('heroAtk');
-        const heroDef = getValue('heroDef');
-
         const enemyLevel = getValue('enemyLevel');
-        const enemyHp = getValue('enemyHp');
-        const enemyAtk = getValue('enemyAtk');
-        const enemyDef = getValue('enemyDef');
         const simCount = Math.max(1, Math.min(1000, getValue('simCount') || 1));
+
+        // 使用公式获取英雄和敌人数据
+        const heroData = seerUtil.getInstanceDataByNameAndOccuAndLevel("主角1", 1, heroLevel);
+        const enemyData = seerUtil.getInstanceDataByNameAndOccuAndLevel("怪物1", 1, enemyLevel);
+
+        const heroHp = Math.round(heroData.hp);
+        const heroAtk = Math.round(heroData.attack);
+        const heroDef = Math.round(heroData.defense);
+
+        const enemyHp = Math.round(enemyData.hp);
+        const enemyAtk = Math.round(enemyData.attack);
+        const enemyDef = Math.round(enemyData.defense);
 
         console.log('Custom Battle Config:', { heroLevel, heroHp, heroAtk, heroDef, enemyLevel, enemyHp, enemyAtk, enemyDef, simCount });
 
@@ -820,6 +901,60 @@ ${i18n.t('status.battleDetails.footer')}
 `;
             outputEl.textContent = details;
         }
+    }
+
+    private levelWarningToast: HTMLElement | null = null;
+    private levelWarningTimer: number | null = null;
+
+    private showLevelWarning() {
+        const message = i18n.t('status.cannotModifyLevel');
+        
+        // Clear existing timer
+        if (this.levelWarningTimer) {
+            clearTimeout(this.levelWarningTimer);
+            this.levelWarningTimer = null;
+        }
+        
+        // Reuse existing toast or create new one
+        if (!this.levelWarningToast) {
+            this.levelWarningToast = document.createElement('div');
+            this.levelWarningToast.className = 'level-warning-toast';
+            this.levelWarningToast.style.cssText = `
+                position: fixed;
+                top: 20%;
+                left: 50%;
+                transform: translateX(-50%) translateY(-20px);
+                background: rgba(245, 158, 11, 0.95);
+                color: #1a1a2e;
+                padding: 12px 24px;
+                border-radius: 8px;
+                font-weight: 600;
+                font-size: 14px;
+                z-index: 10000;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+                opacity: 0;
+                transition: all 0.3s ease;
+            `;
+            document.body.appendChild(this.levelWarningToast);
+        }
+        
+        this.levelWarningToast.textContent = message;
+        
+        // Animate in
+        requestAnimationFrame(() => {
+            if (this.levelWarningToast) {
+                this.levelWarningToast.style.opacity = '1';
+                this.levelWarningToast.style.transform = 'translateX(-50%) translateY(0)';
+            }
+        });
+        
+        // Animate out after 2 seconds
+        this.levelWarningTimer = window.setTimeout(() => {
+            if (this.levelWarningToast) {
+                this.levelWarningToast.style.opacity = '0';
+                this.levelWarningToast.style.transform = 'translateX(-50%) translateY(-20px)';
+            }
+        }, 2000);
     }
 
     private setStatus(type: string, message: string) {

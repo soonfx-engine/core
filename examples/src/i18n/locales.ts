@@ -95,6 +95,7 @@ export const en = {
     simulating: "🔄 Simulating battles... {current}/{total} ({percent}%)",
     success: "✅ Simulation complete! Click on any chart point to see detailed battle data.",
     error: "❌ Simulation failed: {message}",
+    cannotModifyLevel: "⚠️ Cannot modify level during battle!",
     battleDetails: {
       header: "========== Level {level} Battle Details ==========",
       duration: "Battle Duration: {rounds} rounds",
@@ -202,6 +203,7 @@ export const zhCN = {
     simulating: "🔄 正在模拟战斗... {current}/{total} ({percent}%)",
     success: "✅ 模拟完成！点击图表上的任意点查看详细战斗数据。",
     error: "❌ 模拟失败: {message}",
+    cannotModifyLevel: "⚠️ 战斗中不能修改等级！",
     battleDetails: {
       header: "========== 等级 {level} 战斗详情 ==========",
       duration: "战斗持续: {rounds} 回合",
