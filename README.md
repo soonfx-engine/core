@@ -26,8 +26,7 @@
 ## 📸 Demo
 
 ![Demo](docs/assets/demo2.gif)
-![Demo](docs/assets/demo1.gif)
-![Demo](docs/assets/demo.png)
+![Demo](docs/assets/demo1.gif) 
 
 ## ✨ Features
 
