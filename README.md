@@ -25,8 +25,14 @@
 
 ## 📸 Demo
 
-![Demo](docs/assets/demo2.gif)
+### [SoonFx Editor](https://github.com/soonfx-engine/editor)
+
+![SoonFx Editor](docs/assets/editor.gif)
+
+### Runtime Demo
+
 ![Demo](docs/assets/demo1.gif) 
+![Demo](docs/assets/demo2.gif)
 
 ## ✨ Features
 
