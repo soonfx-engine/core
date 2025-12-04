@@ -1,4 +1,6 @@
 import { BasicBody } from "../data/models/BasicBody";
+export { MathUtils } from "./MathUtils";
+export * from "./MathUtils";
 
 /**
  * 安全获取 BasicBody 对象的值

@@ -21,6 +21,7 @@ export { MetadataData } from "./data/metadata/MetadataData";
 export { OperationLayerData } from "./data/layers/OperationLayerData";
 export { Message } from "./communication/messaging/Message";
 export { NodeType } from "./core/types/NodeType";
+export { MathUtils } from "./utils/MathUtils";
 
 // 环境兼容性处理
 const globalThis_: any = (function () {

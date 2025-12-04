@@ -2,7 +2,7 @@
 
 ## 🔧 v2.0.1 - System.ts Refactoring
 
-- [ ] Extract `MathUtils` module (vector/distance/interpolation)
+- [x] Extract `MathUtils` module (vector/distance/interpolation)
 - [ ] Extract `ExpressionParser` module (RPN/evaluation)
 - [ ] Extract `LibraryManager` module (library operations)
 - [ ] Extract `Serializer` module (save/load)

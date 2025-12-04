@@ -47,6 +47,7 @@ import { SheetData } from "../../data/storage/SheetData";
 import { OperationLayerData } from "../../data/layers/OperationLayerData";
 import { Message } from "../../communication/messaging/Message";
 import { NodeType } from "../../core/types/NodeType";
+import { MathUtils } from "../../utils/MathUtils";
 
 /**
  * 测试基类
@@ -97,19 +98,15 @@ export class fx {
   /** 代码执行状态 */
   static code = false;
 
+  // ==================== 数学工具函数 (委托到 MathUtils) ====================
+
   /**
    * 判断是否为数字
    * @param token 待检查的值
    * @returns 是否为有效数字
+   * @see MathUtils.isNumber
    */
-  static isNumber = function (token: any): boolean {
-    try {
-      return !isNaN(Number(token)) && isFinite(Number(token));
-    } catch (error) {
-      console.error("Error checking if value is number:", error);
-      return false;
-    }
-  };
+  static isNumber = MathUtils.isNumber;
 
   /**
    * 混合公式 - 线性插值
@@ -117,18 +114,15 @@ export class fx {
    * @param v2 结束值
    * @param v3 混合系数 (0-1)
    * @returns 混合结果
+   * @see MathUtils.mix
    */
-  static mix = function (v1: number, v2: number, v3: number): number {
-    try {
-      if (!fx.isNumber(v1) || !fx.isNumber(v2) || !fx.isNumber(v3)) {
-        throw new Error("Invalid parameters for mix function");
-      }
-      return v1 * (1 - v3) + v2 * v3;
-    } catch (error) {
-      console.error("Error in mix function:", error);
-      return 0;
-    }
-  };
+  static mix = MathUtils.mix;
+
+  /**
+   * 线性插值 (lerp)
+   * @see MathUtils.lerp
+   */
+  static lerp = MathUtils.lerp;
 
   /**
    * 计算向量的叉积
@@ -137,28 +131,9 @@ export class fx {
    * @param p2x 第二个向量的x分量
    * @param p2y 第二个向量的y分量
    * @returns 叉积结果
+   * @see MathUtils.cross
    */
-  static cross = function (
-    p1x: number,
-    p1y: number,
-    p2x: number,
-    p2y: number
-  ): number {
-    try {
-      if (
-        !fx.isNumber(p1x) ||
-        !fx.isNumber(p1y) ||
-        !fx.isNumber(p2x) ||
-        !fx.isNumber(p2y)
-      ) {
-        throw new Error("Invalid parameters for cross function");
-      }
-      return p1x * p2x - p1y * p2y;
-    } catch (error) {
-      console.error("Error in cross function:", error);
-      return 0;
-    }
-  };
+  static cross = MathUtils.cross;
 
   /**
    * 计算向量的点积
@@ -167,28 +142,9 @@ export class fx {
    * @param p2x 第二个向量的x分量
    * @param p2y 第二个向量的y分量
    * @returns 点积结果
+   * @see MathUtils.dot
    */
-  static dot = function (
-    p1x: number,
-    p1y: number,
-    p2x: number,
-    p2y: number
-  ): number {
-    try {
-      if (
-        !fx.isNumber(p1x) ||
-        !fx.isNumber(p1y) ||
-        !fx.isNumber(p2x) ||
-        !fx.isNumber(p2y)
-      ) {
-        throw new Error("Invalid parameters for dot function");
-      }
-      return p1x * p2x + p1y * p2y;
-    } catch (error) {
-      console.error("Error in dot function:", error);
-      return 0;
-    }
-  };
+  static dot = MathUtils.dot;
 
   /**
    * 计算两点之间的距离
@@ -197,48 +153,36 @@ export class fx {
    * @param p2x 第二个点的x坐标
    * @param p2y 第二个点的y坐标
    * @returns 距离值
+   * @see MathUtils.distance
    */
-  static distance = function (
-    p1x: number,
-    p1y: number,
-    p2x: number,
-    p2y: number
-  ): number {
-    try {
-      if (
-        !fx.isNumber(p1x) ||
-        !fx.isNumber(p1y) ||
-        !fx.isNumber(p2x) ||
-        !fx.isNumber(p2y)
-      ) {
-        throw new Error("Invalid parameters for distance function");
-      }
-      const a = Math.abs(p1x - p2x);
-      const b = Math.abs(p1y - p2y);
-      return fx.length(a, b);
-    } catch (error) {
-      console.error("Error in distance function:", error);
-      return 0;
-    }
-  };
+  static distance = MathUtils.distance;
 
   /**
    * 计算向量的长度
    * @param a x分量
    * @param b y分量
    * @returns 向量长度
+   * @see MathUtils.length
    */
-  static length = function (a: number, b: number): number {
-    try {
-      if (!fx.isNumber(a) || !fx.isNumber(b)) {
-        throw new Error("Invalid parameters for length function");
-      }
-      return Math.sqrt(a * a + b * b);
-    } catch (error) {
-      console.error("Error in length function:", error);
-      return 0;
-    }
-  };
+  static length = MathUtils.length;
+
+  /**
+   * 将值限制在指定范围内
+   * @see MathUtils.clamp
+   */
+  static clamp = MathUtils.clamp;
+
+  /**
+   * 向量归一化
+   * @see MathUtils.normalize
+   */
+  static normalize = MathUtils.normalize;
+
+  /**
+   * 数学工具模块引用
+   * 可直接访问完整的 MathUtils 模块
+   */
+  static MathUtils = MathUtils;
   // ==================== 系统状态属性 ====================
 
   /** 看板列表 */
