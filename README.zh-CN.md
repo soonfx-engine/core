@@ -27,12 +27,12 @@
 
 ### [SoonFx 编辑器](https://github.com/soonfx-engine/editor)
 
-![SoonFx 编辑器](docs/assets/editor.gif)
+![SoonFx 编辑器](assets/editor.gif)
 
 ### [运行时演示](https://soonfx.dev/)
 
-![Demo](docs/assets/demo1.gif) 
-![Demo](docs/assets/demo2.gif)
+![Demo](assets/demo1.gif) 
+![Demo](assets/demo2.gif)
 
 ## ✨ 核心特性
 

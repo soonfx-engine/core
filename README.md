@@ -27,12 +27,12 @@
 
 ### [SoonFx Editor](https://github.com/soonfx-engine/editor)
 
-![SoonFx Editor](docs/assets/editor.gif)
+![SoonFx Editor](assets/editor.gif)
 
 ### [Runtime Demo](https://soonfx.dev/)
 
-![Demo](docs/assets/demo1.gif) 
-![Demo](docs/assets/demo2.gif)
+![Demo](assets/demo1.gif) 
+![Demo](assets/demo2.gif)
 
 ## ✨ Features
 
