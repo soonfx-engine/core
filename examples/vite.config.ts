@@ -9,7 +9,7 @@ export default defineConfig({
     root: '.',
     base: './',
     build: {
-        outDir: '../docs/',
+        outDir: '../docs/examples',
         emptyOutDir: true,
         rollupOptions: {
             output: {

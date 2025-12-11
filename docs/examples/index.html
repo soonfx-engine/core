@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SoonFx Engine - Interactive Battle Demo</title>
+    <base href="./">
+    <style>
+        .config-input {
+            background: rgba(0, 0, 0, 0.3);
+            border: 1px solid var(--text-gray);
+            color: var(--text-light);
+            padding: 2px 6px;
+            border-radius: 4px;
+            width: 60px;
+            float: right;
+            transition: border-color 0.2s, box-shadow 0.2s;
+            font-size: 0.8rem;
+        }
+        .config-label {
+            color: var(--text-light);
+            padding: 2px 6px;
+            width: 60px;
+            float: right;
+            text-align: right;
+            font-size: 0.8rem;
+        }
+        .config-slider {
+            flex: 1;
+            height: 6px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 3px;
+            outline: none;
+            cursor: pointer;
+        }
+        .config-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .config-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+            box-shadow: 0 0 8px rgba(6, 182, 212, 0.6);
+        }
+        .config-slider::-moz-range-thumb {
+            width: 16px;
+            height: 16px;
+            background: var(--accent-color);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+        .config-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.2);
+        }
+        .config-input:invalid {
+            border-color: var(--danger-color);
+        }
+        .preset-btn {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--text-gray);
+            color: var(--text-gray);
+            padding: 0.3rem 0.6rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            transition: all 0.2s;
+        }
+        .preset-btn:hover {
+            background: rgba(6, 182, 212, 0.2);
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+        .preset-btn.active {
+            background: var(--accent-color);
+            border-color: var(--accent-color);
+            color: var(--dark-bg);
+        }
+        .config-section {
+            background: rgba(0, 0, 0, 0.15);
+            padding: 0.5rem;
+            border-radius: 8px;
+        }
+        .start-battle-btn {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            color: var(--text-light);
+            border: 2px solid var(--accent-color);
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.4);
+        }
+        .start-battle-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 16px rgba(6, 182, 212, 0.6);
+        }
+        .start-battle-btn:active {
+            transform: translateY(0);
+        }
+        .start-battle-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .start-battle-btn.running {
+            background: linear-gradient(135deg, #ef4444, #f97316);
+            border-color: #ef4444;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5);
+            animation: pulse-battle 1.5s ease-in-out infinite;
+            cursor: wait;
+        }
+        .start-battle-btn.running:hover {
+            transform: none;
+            box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5);
+        }
+        @keyframes pulse-battle {
+            0%, 100% {
+                box-shadow: 0 4px 12px rgba(239, 68, 68, 0.5);
+            }
+            50% {
+                box-shadow: 0 4px 20px rgba(239, 68, 68, 0.8);
+            }
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #1e3a8a;
+            --secondary-color: #7c3aed;
+            --accent-color: #06b6d4;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --dark-bg: #0f172a;
+            --card-bg: #1e293b;
+            --text-light: #f1f5f9;
+            --text-gray: #94a3b8;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            color: var(--text-light);
+            padding: 1rem;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+
+        /* Header */
+        .header {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 0.8rem;
+            margin-bottom: 0.8rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            position: relative;
+        }
+
+        .header-btns {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .lang-btn, .github-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--accent-color);
+            color: var(--accent-color);
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: all 0.3s;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .lang-btn:hover, .github-btn:hover {
+            background: var(--accent-color);
+            color: var(--dark-bg);
+        }
+
+        .github-btn svg {
+            width: 16px;
+            height: 16px;
+            fill: currentColor;
+        }
+
+        .header h1 {
+            color: var(--accent-color);
+            font-size: 1.5rem;
+            margin-bottom: 0.3rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+        }
+
+        .header p {
+            color: var(--text-gray);
+            font-size: 0.9rem;
+        }
+
+        /* Main Layout */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 240px 1fr 320px;
+            gap: 0.8rem;
+            align-items: start;
+        }
+
+        /* Scenario Selector */
+        .scenario-panel {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0.8rem;
+        }
+
+        .scenario-panel h2 {
+            color: var(--accent-color);
+            font-size: 1.1rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .scenario-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+        }
+
+        .scenario-btn {
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.5), rgba(124, 58, 237, 0.5));
+            color: var(--text-light);
+            border: 2px solid transparent;
+            padding: 0.75rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: left;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+
+        .scenario-btn:hover {
+            border-color: var(--accent-color);
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.3);
+        }
+
+        .scenario-btn.active {
+            background: linear-gradient(135deg, var(--accent-color), var(--secondary-color));
+            border-color: var(--accent-color);
+            box-shadow: 0 4px 12px rgba(6, 182, 212, 0.5);
+        }
+
+        .scenario-btn .label {
+            display: block;
+            font-size: 0.9rem;
+            margin-bottom: 0.2rem;
+        }
+
+        .scenario-btn .desc {
+            display: block;
+            font-size: 0.8rem;
+            color: var(--text-gray);
+            font-weight: 400;
+        }
+
+        .scenario-btn.active .desc {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        /* Custom Battle Special Style */
+        .scenario-btn[data-scenario="custom-battle"] {
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.4), rgba(234, 88, 12, 0.4));
+            border: 2px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .scenario-btn[data-scenario="custom-battle"]:hover {
+            border-color: var(--warning-color);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.4);
+        }
+
+        .scenario-btn[data-scenario="custom-battle"].active {
+            background: linear-gradient(135deg, #f59e0b, #ea580c);
+            border-color: var(--warning-color);
+            box-shadow: 0 4px 12px rgba(245, 158, 11, 0.6);
+        }
+
+        /* Chart Area */
+        .chart-area {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .chart-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 0.8rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .chart-card h3 {
+            color: var(--accent-color);
+            font-size: 1rem;
+            margin-bottom: 0.6rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chart-wrapper {
+            position: relative;
+            height: 160px;
+        }
+
+        .chart-container {
+            width: 100%;
+            height: 100%;
+        }
+
+        .chart-placeholder {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-gray);
+            font-size: 0.9rem;
+            font-style: italic;
+            background: rgba(0, 0, 0, 0.2);
+            border: 2px dashed rgba(150, 150, 150, 0.3);
+            border-radius: 8px;
+        }
+
+        .chart-placeholder.hidden {
+            display: none;
+        }
+
+        /* Battle Details */
+        .details-panel {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+            position: sticky;
+            top: 0.8rem;
+            max-height: calc(100vh - 1.6rem);
+            overflow-y: auto;
+        }
+
+        .details-panel::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .details-panel::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 4px;
+        }
+
+        .details-panel::-webkit-scrollbar-thumb {
+            background: var(--accent-color);
+            border-radius: 4px;
+        }
+
+        .details-panel h2 {
+            color: var(--accent-color);
+            font-size: 1.1rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status {
+            padding: 0.75rem;
+            border-radius: 8px;
+            margin-bottom: 0.8rem;
+            font-weight: 500;
+            font-size: 0.85rem;
+        }
+
+        .status.loading {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning-color);
+            border: 1px solid var(--warning-color);
+        }
+
+        .status.success {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--success-color);
+            border: 1px solid var(--success-color);
+        }
+
+        .status.error {
+            background: rgba(239, 68, 68, 0.2);
+            color: var(--danger-color);
+            border: 1px solid var(--danger-color);
+        }
+
+        .status.warning {
+            background: rgba(245, 158, 11, 0.2);
+            color: var(--warning-color);
+            border: 1px solid var(--warning-color);
+        }
+
+        .detail-chart {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 8px;
+            padding: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .detail-chart h4 {
+            color: var(--text-light);
+            font-size: 0.9rem;
+            margin-bottom: 0.6rem;
+        }
+
+        .detail-chart-wrapper {
+            height: 150px;
+            position: relative;
+        }
+
+        #output {
+            background: #000;
+            color: #0f0;
+            padding: 0.75rem;
+            border-radius: 8px;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.8rem;
+            line-height: 1.4;
+            max-height: 200px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+        }
+
+        #output::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #output::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        #output::-webkit-scrollbar-thumb {
+            background: #0f0;
+            border-radius: 4px;
+        }
+
+        #output:empty::before {
+            content: attr(data-placeholder);
+            color: #888;
+            font-style: italic;
+        }
+
+        .info-box {
+            background: rgba(6, 182, 212, 0.1);
+            border-left: 3px solid var(--accent-color);
+            padding: 0.9rem;
+            margin-bottom: 0.9rem;
+            border-radius: 4px;
+            font-size: 0.85rem;
+        }
+
+        .info-box strong {
+            color: var(--accent-color);
+        }
+
+        /* Loading Animation */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: var(--accent-color);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1400px) {
+            .main-layout {
+                grid-template-columns: 260px 1fr 350px;
+            }
+        }
+
+        @media (max-width: 1200px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+
+            .scenario-panel, .details-panel {
+                position: static;
+            }
+
+            .details-panel {
+                max-height: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+
+            .chart-wrapper {
+                height: 250px;
+            }
+
+            .detail-chart-wrapper {
+                height: 180px;
+            }
+            
+            .header-btns {
+                top: 0.5rem;
+                right: 0.5rem;
+            }
+            
+            .github-btn span {
+                display: none;
+            }
+        }
+
+        /* Story Mode Styles */
+        .story-header {
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.3), rgba(124, 58, 237, 0.3));
+            padding: 0.7rem;
+            border-radius: 8px;
+            margin-bottom: 0.6rem;
+            border-left: 4px solid var(--accent-color);
+        }
+
+        .story-header h3 {
+            color: var(--accent-color);
+            font-size: 1rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .story-header p {
+            color: var(--text-gray);
+            font-size: 0.85rem;
+        }
+
+        /* Character View Styles */
+        .battle-arena {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.8rem;
+            padding: 0.8rem;
+            background: linear-gradient(135deg, rgba(30, 58, 138, 0.2), rgba(124, 58, 237, 0.2));
+            border-radius: 12px;
+            border: 2px solid rgba(6, 182, 212, 0.3);
+            position: relative;
+            min-height: 140px;
+        }
+
+        .character-view {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+        .hero-view {
+            border: 2px solid rgba(6, 182, 212, 0.5);
+        }
+
+        .enemy-view {
+            border: 2px solid rgba(239, 68, 68, 0.5);
+        }
+
+        .character-sprite {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+        .character-avatar {
+            font-size: 40px;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.5));
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .character-info {
+            width: 100%;
+            text-align: center;
+        }
+
+        .character-name {
+            font-size: 0.9rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+            color: var(--text-light);
+        }
+
+        .hero-view .character-name {
+            color: var(--accent-color);
+        }
+
+        .enemy-view .character-name {
+            color: var(--danger-color);
+        }
+
+        .hp-bar-container {
+            margin-bottom: 0.3rem;
+        }
+
+        .hp-bar {
+            width: 100%;
+            height: 12px;
+            background: rgba(0, 0, 0, 0.5);
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            position: relative;
+        }
+
+        .hp-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #10b981, #34d399);
+            transition: width 0.5s ease, background-color 0.3s ease;
+            border-radius: 6px;
+        }
+
+        .hp-text {
+            font-size: 0.65rem;
+            color: var(--text-gray);
+            margin-top: 0.1rem;
+            font-weight: 500;
+        }
+
+        .character-stats {
+            display: flex;
+            justify-content: space-around;
+            gap: 0.3rem;
+            font-size: 0.7rem;
+            color: var(--text-gray);
+            flex-wrap: wrap;
+        }
+
+        .character-stats span {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.1rem 0.4rem;
+            border-radius: 4px;
+        }
+
+        .vs-divider {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            text-shadow: 0 0 10px rgba(6, 182, 212, 0.8);
+            padding: 0 1rem;
+            position: relative;
+        }
+
+        .vs-divider::before,
+        .vs-divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+        }
+
+        .vs-divider::before {
+            left: -50px;
+        }
+
+        .vs-divider::after {
+            right: -50px;
+        }
+
+        .damage-number {
+            animation: damageFloat 0.8s ease-out forwards;
+        }
+
+        @keyframes damageFloat {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-50px) scale(1.2);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .battle-arena {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .vs-divider {
+                transform: rotate(90deg);
+            }
+
+            .vs-divider::before,
+            .vs-divider::after {
+                display: none;
+            }
+
+            .character-sprite {
+                width: 100px;
+                height: 100px;
+            }
+
+            .character-avatar {
+                font-size: 60px;
+            }
+        }
+    </style>
+  <script type="module" crossorigin src="./assets/index-edDejXwk.js"></script>
+  <link rel="modulepreload" crossorigin href="./assets/echarts-Bn9PLWWT.js">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-btns">
+                <a href="https://github.com/soonfx-engine/core" target="_blank" class="github-btn" title="GitHub Repository">
+                    <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+                    <span>GitHub</span>
+                </a>
+                <button id="langSwitch" class="lang-btn" data-i18n="header.langSwitch">中文</button>
+            </div>
+            <h1 data-i18n="header.title">⚔️ Interactive Battle Simulation</h1>
+            <p data-i18n="header.subtitle">Real-time combat data visualization and analysis powered by SoonFx Engine</p>
+        </div>
+
+        <!-- Main Layout -->
+        <div class="main-layout">
+            <!-- Scenario Selector -->
+            <div class="scenario-panel">
+                <h2 data-i18n="scenarios.title">🎮 Battle Scenarios</h2>
+                <div class="scenario-list">
+                    <button class="scenario-btn" data-scenario="pve-growth">
+                        <span class="label" data-i18n="scenarios.pve.label">📈 Level Progression (1-50)</span>
+                        <span class="desc" data-i18n="scenarios.pve.desc">Watch how stats scale across levels</span>
+                    </button>
+                    <button class="scenario-btn" data-scenario="newbie">
+                        <span class="label" data-i18n="scenarios.newbie.label">🌱 Newbie Village (Lv 1-10)</span>
+                        <span class="desc" data-i18n="scenarios.newbie.desc">First steps in the adventure</span>
+                    </button>
+                    <button class="scenario-btn" data-scenario="mid-game">
+                        <span class="label" data-i18n="scenarios.midgame.label">⚔️ Mid-Game Challenge (Lv 20-30)</span>
+                        <span class="desc" data-i18n="scenarios.midgame.desc">Intermediate difficulty battles</span>
+                    </button>
+                    <button class="scenario-btn active" data-scenario="custom-battle">
+                        <span class="label" data-i18n="scenarios.custom.label">🔧 Custom Simulation</span>
+                        <span class="desc" data-i18n="scenarios.custom.desc">Adjust stats and fight!</span>
+                    </button>
+                </div>
+
+                <div class="info-box" style="margin-top: 1.5rem;">
+                    <strong data-i18n="scenarios.tip.label">💡 Tip:</strong>
+                    <span data-i18n="scenarios.tip.text">Click on any data point in the charts to see detailed battle information for that level.</span>
+                </div>
+            </div>
+
+            <!-- Chart Area -->
+            <div class="chart-area">
+                <!-- Story Header -->
+                <div class="story-header" id="storyHeader">
+                    <h3 id="storyTitle" data-i18n="story.pveGrowth.title">📊 Analyzing Level Progression</h3>
+                    <p id="storyDesc" data-i18n="story.pveGrowth.desc">Simulating 50 battles to show how character stats evolve from novice to master...</p>
+                </div>
+
+                <!-- Custom Battle Config -->
+                <div id="customConfigPanel" class="chart-card" style="display: none; margin-bottom: 0.8rem;">
+                    <h3 data-i18n="custom.title">⚙️ Battle Configuration</h3>
+                    
+                    <!-- Character View -->
+                    <div id="characterViewContainer" style="display: none; margin-bottom: 0.5rem;"></div>
+                    
+                    <!-- Preset Buttons -->
+                    <div style="display: flex; gap: 0.5rem; margin-bottom: 0.5rem; flex-wrap: wrap;">
+                        <button class="preset-btn" data-preset="balanced" data-i18n="custom.presets.balanced">⚖️ Balanced</button>
+                        <button class="preset-btn" data-preset="heroStrong" data-i18n="custom.presets.heroStrong">💪 Strong Hero</button>
+                        <button class="preset-btn" data-preset="enemyStrong" data-i18n="custom.presets.enemyStrong">👹 Strong Enemy</button>
+                        <button class="preset-btn" data-preset="tank" data-i18n="custom.presets.tank">🛡️ Tank Build</button>
+                        <button class="preset-btn" data-preset="glass" data-i18n="custom.presets.glass">🗡️ Glass Cannon</button>
+                    </div>
+
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem;">
+                        <div class="config-section">
+                            <h4 style="margin-bottom: 0.3rem; color: var(--accent-color);" data-i18n="custom.hero">🦸 Hero</h4>
+                            <div style="display: grid; gap: 0.3rem;">
+                                <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <span data-i18n="custom.level">Level</span>:
+                                    <input type="range" id="heroLevel" value="10" min="1" max="100" class="config-slider">
+                                    <span id="heroLevelValue" class="config-label" style="width: 30px;">10</span>
+                                </label>
+                                <label><span data-i18n="custom.hp">HP</span>: <span id="heroHp" class="config-label">--</span></label>
+                                <label><span data-i18n="custom.attack">Attack</span>: <span id="heroAtk" class="config-label">--</span></label>
+                            </div>
+                        </div>
+                        <div class="config-section">
+                            <h4 style="margin-bottom: 0.3rem; color: var(--danger-color);" data-i18n="custom.enemy">👹 Enemy</h4>
+                            <div style="display: grid; gap: 0.3rem;">
+                                <label style="display: flex; align-items: center; gap: 0.5rem;">
+                                    <span data-i18n="custom.level">Level</span>:
+                                    <input type="range" id="enemyLevel" value="10" min="1" max="100" class="config-slider">
+                                    <span id="enemyLevelValue" class="config-label" style="width: 30px;">10</span>
+                                </label>
+                                <label><span data-i18n="custom.hp">HP</span>: <span id="enemyHp" class="config-label">--</span></label>
+                                <label><span data-i18n="custom.attack">Attack</span>: <span id="enemyAtk" class="config-label">--</span></label>
+                            </div>
+                        </div>
+                    </div>
+                    <div style="margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: flex-end;">
+                        <input type="hidden" id="simCount" value="1">
+                        <button id="startCustomBattle" class="start-battle-btn" style="width: auto; padding: 0.6rem 1.5rem;">
+                            <span class="label" data-i18n="custom.start">⚔️ Start Battle</span>
+                        </button>
+                    </div>
+                    <div id="customProgress" style="display: none; margin-top: 0.8rem;">
+                        <div style="background: rgba(0,0,0,0.3); border-radius: 4px; height: 6px; overflow: hidden;">
+                            <div id="progressBar" style="background: var(--accent-color); height: 100%; width: 0%; transition: width 0.1s;"></div>
+                        </div>
+                        <div id="progressText" style="text-align: center; font-size: 0.8rem; color: var(--text-gray); margin-top: 0.3rem;"></div>
+                    </div>
+                </div>
+
+                <!-- HP Chart -->
+                <div class="chart-card">
+                    <h3 id="hpChartTitle" data-i18n="charts.hpByLevel">❤️ Health Points (HP) by Level</h3>
+                    <div class="chart-wrapper">
+                        <div id="hpChart" class="chart-container"></div>
+                        <div id="hpPlaceholder" class="chart-placeholder">
+                            <span class="loading-spinner"></span>
+                            <span style="margin-left: 0.5rem;" data-i18n="charts.loading">Running simulations...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Damage Chart -->
+                <div class="chart-card">
+                    <h3 id="damageChartTitle" data-i18n="charts.damageByLevel">💥 Attack Damage by Level</h3>
+                    <div class="chart-wrapper">
+                        <div id="damageChart" class="chart-container"></div>
+                        <div id="damagePlaceholder" class="chart-placeholder">
+                            <span class="loading-spinner"></span>
+                            <span style="margin-left: 0.5rem;" data-i18n="charts.loading">Running simulations...</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Rounds Chart -->
+                <div class="chart-card">
+                    <h3 id="roundsChartTitle" data-i18n="charts.roundsByLevel">⏱️ Battle Duration (Rounds) by Level</h3>
+                    <div class="chart-wrapper">
+                        <div id="roundsChart" class="chart-container"></div>
+                        <div id="roundsPlaceholder" class="chart-placeholder">
+                            <span class="loading-spinner"></span>
+                            <span style="margin-left: 0.5rem;" data-i18n="charts.loading">Running simulations...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Battle Details -->
+            <div class="details-panel">
+                <h2 data-i18n="charts.details.title">📋 Battle Details</h2>
+                
+                <div id="status"></div>
+
+                <!-- Detail Charts -->
+                <div id="detailChartsContainer" style="display: none;">
+                    <div class="detail-chart">
+                        <h4 data-i18n="charts.details.hpChange">HP Change Over Rounds</h4>
+                        <div class="detail-chart-wrapper">
+                            <div id="detailHpChart" class="chart-container"></div>
+                        </div>
+                    </div>
+
+                    <div class="detail-chart">
+                        <h4 data-i18n="charts.details.damageStats">Damage Statistics</h4>
+                        <div class="detail-chart-wrapper">
+                            <div id="detailDamageChart" class="chart-container"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="output" data-placeholder="Waiting for simulation..."></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load battle demo module -->
+    <script>
+        // Apply initial translation placeholder logic for output
+        document.addEventListener('DOMContentLoaded', () => {
+           // i18n handled by main.ts -> DemoApp -> I18nService
+        });
+    </script>
+</body>
+</html>

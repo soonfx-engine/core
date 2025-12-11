@@ -25,7 +25,7 @@
     "lint": "eslint \"src/**/*.ts\"",
     "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
     "docs:dev": "vitepress dev site",
-    "docs:build": "vitepress build site",
+    "docs:build": "vitepress build site && cd examples && npm run build",
     "docs:preview": "vitepress preview site"
   },
   "keywords": [
