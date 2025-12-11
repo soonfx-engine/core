@@ -1,19 +1,15 @@
 <div align="center">
 
-# SoonFx 运行时
+# SoonFx Runtime
 
-> SoonFx：TypeScript 优先的 RPG 和策略游戏数值引擎。
-  此 GitHub 项目托管了使用 [SoonFx 编辑器](https://github.com/soonfx-engine/editor) 数据所需的 SoonFx 编辑器运行时。
+> **TypeScript 游戏数值引擎。**  
+> 将逻辑与代码解耦，轻松管理复杂公式，构建稳健的 RPG/SLG/卡牌系统。
 
 [![npm version](https://img.shields.io/npm/v/@soonfx/engine.svg)](https://www.npmjs.com/package/@soonfx/engine)
 [![npm downloads](https://img.shields.io/npm/dm/@soonfx/engine.svg)](https://www.npmjs.com/package/@soonfx/engine)
 [![CI](https://github.com/soonfx-engine/core/actions/workflows/ci.yml/badge.svg)](https://github.com/soonfx-engine/core/actions/workflows/ci.yml)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
-
-**基于TypeScript开发的 游戏数值计算和公式系统**
-
-此 GitHub 项目托管了使用 [SoonFx 编辑器](https://github.com/soonfx-engine/editor) 数据所需的 SoonFx 编辑器运行时。
 
 [安装](#-安装) · [快速开始](#-快速开始) · [文档](#-核心-api) · [示例项目](examples) · [路线图](ROADMAP.md) · [在线演示](https://soonfx.dev)
 
@@ -23,11 +19,34 @@
 
 ---
 
+## 🎨 可视化编辑器驱动
+
+告别硬编码公式。实现可视化构建。
+
+**SoonFx Runtime** 是 **[SoonFx Editor](https://github.com/soonfx-engine/editor)** 的核心引擎。它允许游戏策划在不写一行代码的情况下配置复杂的逻辑，而开发者可以在运行时安全地执行它。
+
+### 工作流
+
+1.  **设计**：策划在 **可视化编辑器** 中创建公式、技能效果和属性关系。
+2.  **导出**：编辑器生成 JSON 配置文件。
+3.  **运行**：**SoonFx Runtime** 加载此 JSON 并在游戏中执行逻辑。
+
+> **注意**：虽然 SoonFx Runtime 可以独立用于数学和表达式计算，但与编辑器搭配使用才能释放其真正潜能。
+
+![SoonFx Editor](assets/editor.gif)
+
+## 💡 使用场景
+
+SoonFx 专为重数值游戏类型设计：
+
+*   ⚔️ **RPG 系统**：技能伤害、角色属性成长、装备加成、战斗力 (CP) 计算。
+*   🏰 **SLG / 策略**：资源产出率、建筑升级时间、行军时间、科技树要求。
+*   🃏 **卡牌游戏**：动态卡牌数值、羁绊效果、牌组平衡模拟。
+*   📊 **模拟仿真**：复杂的经济模型、概率计算。
+
+---
+
 ## 📸 演示
-
-### [SoonFx 编辑器](https://github.com/soonfx-engine/editor)
-
-![SoonFx 编辑器](assets/editor.gif)
 
 ### [运行时演示](https://soonfx.dev/)
 
@@ -36,12 +55,12 @@
 
 ## ✨ 核心特性
 
-- 🎯 **TypeScript 支持** - 类型定义，智能提示和类型检查
-- 🧮 **数学运算库** - 何计算等数学工具
-- 📐 **表达式解析引擎** - 支持复杂的数学表达式求值和 RPN 转换
-- 🎮 **游戏数值系统** - 专为游戏开发设计的角色属性、战斗计算等 
-- 🔧 **灵活的运算体系统** - 支持复杂的游戏逻辑和公式组合
-- 📦 **零依赖** - 轻量级设计，无外部依赖 
+- ⚡ **零依赖** - 轻量且快速，压缩后小于 50KB
+- 🛡️ **类型安全** - 完整的 TypeScript 支持，提供严格类型定义和智能代码补全
+- 📐 **表达式引擎** - 解析并评估复杂的数学表达式，支持 RPN 转换
+- 🎮 **战斗系统** - 内置 RPG 战斗模拟，支持角色属性和伤害计算
+- 🔧 **可扩展** - 灵活的操作符系统，支持复杂游戏逻辑和公式组合
+- 📦 **Tree-shakable** - 现代 ESM 支持，兼容 CommonJS
 
 ## 🚀 面向用户
 
@@ -78,7 +97,6 @@ npm run dev
 
 ```typescript
 import { fx } from '@soonfx/engine';
- 
 
 // 1. 使用数学工具函数
 const distance = fx.distance(0, 0, 10, 10);
@@ -92,7 +110,6 @@ console.log('表达式结果:', result); // 20
 const fixed = fx.fixedDecimal(3.14159, 2);
 console.log('保留两位小数:', fixed); // 3.14
 ```
- 
 
 ### 事件系统
 
@@ -132,12 +149,10 @@ const length = fx.length(a, b);
 // 坐标转换
 const coord = fx.coordinate(x, y, angle, distance);
 ```
- 
 
 ### 游戏角色 (Player)
 
-`Player` 类提供角色属性、战斗计算和战斗模拟功能。完整的战斗系统演示请参见下方的 [示例项目](#-角色属性战斗数值示例) 部分。
- 
+`Player` 类提供角色属性、战斗计算和战斗模拟功能。完整的战斗系统演示请参见下方的 [示例项目](#-示例) 部分。
 
 ## 🏗️ 系统架构
 
@@ -178,26 +193,7 @@ const coord = fx.coordinate(x, y, angle, distance);
     └── ExtendsUtil       扩展工具
 ```
 
-## 💡 使用场景
-
-### 适用于以下游戏类型：
-
-- 🎲 **回合制游戏** - 复杂的数值计算和战斗系统
-- ⚔️ **角色扮演游戏 (RPG)** - 角色属性、技能、装备系统
-- 🏆 **策略游戏** - 数值平衡和公式系统
-- 🎮 **卡牌游戏** - 卡牌属性计算和效果系统
-- 📊 **模拟经营游戏** - 复杂的数值模拟和计算
-
-### 主要应用：
-
-- ✅ 角色属性计算（攻击、防御、生命值等）
-- ✅ 战斗伤害计算和战斗模拟
-- ✅ 装备和道具效果计算
-- ✅ 技能和 Buff 系统
-- ✅ 等级和经验系统
-- ✅ 游戏数值平衡测试
-
-## 📖 角色属性、战斗数值示例
+## 📖 示例
 
 查看 [示例项目](https://github.com/soonfx-engine/core/tree/main/examples) 获取完整的开发示例。
 
@@ -215,12 +211,11 @@ const coord = fx.coordinate(x, y, angle, distance);
 
 ## 🛠️ TypeScript 支持
 
-SoonFX 提供完整的 TypeScript 类型定义：
+SoonFx 提供完整的 TypeScript 类型定义：
 
 ```typescript
 // 自动类型推导
 const distance: number = fx.distance(0, 0, 10, 10);
- 
 
 // 完整的智能提示
 fx. // IDE 会显示所有可用方法
@@ -308,7 +303,7 @@ npm test
 
 - 📦 [npm 包](https://www.npmjs.com/package/@soonfx/engine)
 - 💻 [GitHub 仓库](https://github.com/soonfx-engine/core)
-- 📖 [在线演示](https://soonfx.dev/examples)
+- 📖 [在线演示](https://soonfx.dev)
 - 🐛 [问题反馈](https://github.com/soonfx-engine/core/issues)
 - 💬 [讨论区](https://github.com/soonfx-engine/core/discussions)
 
@@ -330,10 +325,10 @@ npm test
 
 <div align="center">
 
-**[⬆ 回到顶部](#soonfx-游戏数值引擎)**
+**[⬆ 回到顶部](#soonfx-runtime)**
 
-Made with ❤️ by [soonfx-engine](https://github.com/soonfx-engine)
+Made with ❤️ by [SoonFx Team](https://github.com/soonfx-engine)
 
-Copyright © 2025 soonfx-engine. All rights reserved.
+Copyright © 2025 SoonFx Team. All rights reserved.
 
 </div>

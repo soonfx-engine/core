@@ -2,18 +2,14 @@
 
 # SoonFx Runtime
 
-> SoonFx：TypeScript-first game numeric engine for RPG and strategy games. 
-  This GitHub project hosts the SoonFx Editor Runtimes which are needed to use [SoonFx Editor](https://github.com/soonfx-engine/editor) data.
-
+> **The TypeScript-first numeric engine for games.**  
+> Decouple logic from code, manage complex formulas with ease, and build robust RPG/SLG/Card systems.
 
 [![npm version](https://img.shields.io/npm/v/@soonfx/engine.svg)](https://www.npmjs.com/package/@soonfx/engine)
 [![npm downloads](https://img.shields.io/npm/dm/@soonfx/engine.svg)](https://www.npmjs.com/package/@soonfx/engine)
 [![CI](https://github.com/soonfx-engine/core/actions/workflows/ci.yml/badge.svg)](https://github.com/soonfx-engine/core/actions/workflows/ci.yml)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
-
-**A lightweight, type-safe formula engine designed for game developers who need reliable battle calculations, character attributes, and expression parsing - with zero dependencies.**
-
 
 [Installation](#-installation) · [Quick Start](#-quick-start) · [Documentation](#-core-api) · [Examples](examples) · [Roadmap](ROADMAP.md) · [Online Demo](https://soonfx.dev)
 
@@ -23,11 +19,34 @@
 
 ---
 
-## 📸 Demo
+## 🎨 Visual Editor Driven
 
-### [SoonFx Editor](https://github.com/soonfx-engine/editor)
+Stop hardcoding formulas. Build them visually.
+
+**SoonFx Runtime** is the engine that powers the **[SoonFx Editor](https://github.com/soonfx-engine/editor)**. It allows game designers to configure complex logic without writing a single line of code, while developers can safely execute it at runtime.
+
+### The Workflow
+
+1.  **Design**: Designers create formulas, skill effects, and attribute relationships in the **Visual Editor**.
+2.  **Export**: The editor generates a JSON configuration file.
+3.  **Run**: The **SoonFx Runtime** loads this JSON and executes the logic in your game.
+
+> **Note**: While SoonFx Runtime can be used standalone for math and expressions, its true power is unlocked when paired with the Editor.
 
 ![SoonFx Editor](assets/editor.gif)
+
+## 💡 Use Cases
+
+SoonFx is designed for numeric-heavy game genres:
+
+*   ⚔️ **RPG Systems**: Skill damage, character stats growth, equipment bonuses, combat power (CP) calculations.
+*   🏰 **SLG / Strategy**: Resource production rates, building upgrade timers, marching times, tech tree requirements.
+*   🃏 **Card Games**: Dynamic card values, synergy effects, deck balancing simulation.
+*   📊 **Simulation**: Complex economy models, probability calculations.
+
+---
+
+## 📸 Demo
 
 ### [Runtime Demo](https://soonfx.dev/)
 
@@ -174,25 +193,6 @@ The `Player` class provides character attributes, battle calculations, and comba
     └── ExtendsUtil       Extension utilities
 ```
 
-## 💡 Use Cases
-
-### Ideal for These Game Types:
-
-- 🎲 **Turn-based Games** - Complex numeric calculations and battle systems
-- ⚔️ **Role-Playing Games (RPG)** - Character attributes, skills, and equipment systems
-- 🏆 **Strategy Games** - Numerical balance and formula systems
-- 🎮 **Card Games** - Card attribute calculation and effect systems
-- 📊 **Simulation Games** - Complex numerical simulation and calculations
-
-### Main Applications:
-
-- ✅ Character attribute calculations (attack, defense, HP, etc.)
-- ✅ Battle damage calculation and combat simulation
-- ✅ Equipment and item effect calculations
-- ✅ Skill and buff systems
-- ✅ Level and experience systems
-- ✅ Game balance testing
-
 ## 📖 Examples
 
 Check out the [example project](https://github.com/soonfx-engine/core/tree/main/examples) for complete development examples.
@@ -332,4 +332,3 @@ Made with ❤️ by [SoonFx Team](https://github.com/soonfx-engine)
 Copyright © 2025 SoonFx Team. All rights reserved.
 
 </div>
-
