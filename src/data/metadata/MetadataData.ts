@@ -1,4 +1,4 @@
-﻿// import { fx } from "../aextends/System";
+﻿import { VariableValue } from "../models/VariableValue";
 
 /**
  * 元数据类，用于存储和管理元数据信息
@@ -8,7 +8,7 @@
  */
 export class MetadataData {
   /** 元数据的主体对象 */
-  body: any;
+  body: VariableValue;
 
   /** 元数据关联的视图对象 */
   view: any = null;
@@ -29,16 +29,16 @@ export class MetadataData {
   intervalValue: number = 0;
 
   /** 元数据的列表数据 */
-  list: any[];
+  list: any[] = [];
 
   /**
    * 创建元数据实例
    * 
    * @constructor
-   * @param {any} body - 主体数据对象
+   * @param {VariableValue} body - 主体数据对象
    * @description 初始化元数据对象，复制主体数据作为副本
    */
-  constructor(body: any) {
+  constructor(body: VariableValue) {
     this.body = body.copy();
   }
 }

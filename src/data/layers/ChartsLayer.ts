@@ -1,6 +1,8 @@
 ﻿
 import { EventManager as Eve } from "../../core/events/EventManager";
 import { fx } from "../../core/system/System";
+import { VariableValue } from "../models/VariableValue";
+import { OperationLayerData } from "./OperationLayerData";
 
 /**
  * 图表图层类，用于管理图表相关的运算层和元数据
@@ -11,12 +13,12 @@ export class ChartsLayer {
   name: string | undefined;
 
   /** 运算层对象数组 */
-  operationArray: any[] = [];
+  operationArray: OperationLayerData[] = [];
 
   /** 元数据对象 */
-  metadata: any | null = null;
+  metadata: VariableValue | null = null;
   /** 元数据数组 */
-  metadataArray: any[] = [];
+  metadataArray: VariableValue[] = [];
 
   /** 初始单位值 */
   minValue: number = 1;
@@ -51,7 +53,7 @@ export class ChartsLayer {
     if (fx.clickBody != null) {
       this.metadata = (fx.clickBody as any).copy();
       // this.metadataArray.push(this.metadata);
-      this.metadataArray[0] = this.metadata;
+      this.metadataArray[0] = this.metadata as VariableValue;
     }
   }
 

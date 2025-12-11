@@ -21,6 +21,7 @@
     "build": "tsup src/index.ts --format cjs,esm --dts",
     "pack": "npm pack",
     "test": "vitest run",
+    "test:coverage": "vitest run --coverage",
     "lint": "eslint \"src/**/*.ts\"",
     "dev": "tsup src/index.ts --format cjs,esm --dts --watch"
   },
@@ -54,6 +55,7 @@
   },
   "sideEffects": false,
   "devDependencies": {
+    "@vitest/coverage-v8": "^1.6.1",
     "tsup": "^8.0.0",
     "typescript": "^5.0.0",
     "vitest": "^1.0.0"

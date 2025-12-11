@@ -2,6 +2,9 @@ import { fx } from "../../core/system/System";
 import { NodeType } from "../../core/types/NodeType";
 import { EventManager as Eve } from "../../core/events/EventManager";
 import { getCatchValue } from "../../utils/index";
+import { OperationLayerData } from "./OperationLayerData";
+import { MetadataData } from "../metadata/MetadataData";
+import { VariableValue } from "../models/VariableValue";
 
 /**
  * 元数据列表项的类型定义
@@ -22,9 +25,9 @@ export class BillboardLayer {
     /** 图层名称 */
     name: string = "";
     /** 运算层数组 */
-    operationArray: any[] = [];
+    operationArray: OperationLayerData[] = [];
     /** 元数据数组 */
-    metadataArray: any[] = [];
+    metadataArray: MetadataData[] = [];
     /** 唯一标识符 */
     id: number = 0;
 
@@ -59,7 +62,7 @@ export class BillboardLayer {
     pushOperationLayer(): void {
         if (
             fx.clickBody != null &&
-            fx.clickBody.type == NodeType.CalculationLayer
+            fx.clickBody.type == NodeType.CalculationLayer 
         ) {
             const operationLayerData = new fx.OperationLayerData(fx.clickBody);
 

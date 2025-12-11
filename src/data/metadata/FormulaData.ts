@@ -2,6 +2,7 @@
 import { EventManager as Eve } from "../../core/events/EventManager";
 import { getCatchValue } from "../../utils/index";
 import { fx } from "../../core/system/System";
+import { BasicBody } from "../models/BasicBody";
 
 /**
  * 公式数据类，用于存储和管理公式相关信息
@@ -20,7 +21,7 @@ export class FormulaData {
   y: number | undefined;
 
   /** 公式的主体数据对象 */
-  body: any | null = null;
+  body: BasicBody | null = null;
 
   /** 公式的类型标识，固定为 "Formula" */
   type: string = "Formula";
