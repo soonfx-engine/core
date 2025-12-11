@@ -5,3 +5,5 @@ dist
 package-lock.json
 yarn.lock
 coverage
+site/.vitepress/dist
+site/.vitepress/cache

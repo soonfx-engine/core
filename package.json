@@ -23,7 +23,10 @@
     "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "lint": "eslint \"src/**/*.ts\"",
-    "dev": "tsup src/index.ts --format cjs,esm --dts --watch"
+    "dev": "tsup src/index.ts --format cjs,esm --dts --watch",
+    "docs:dev": "vitepress dev site",
+    "docs:build": "vitepress build site",
+    "docs:preview": "vitepress preview site"
   },
   "keywords": [
     "game-engine",
@@ -58,6 +61,8 @@
     "@vitest/coverage-v8": "^1.6.1",
     "tsup": "^8.0.0",
     "typescript": "^5.0.0",
-    "vitest": "^1.0.0"
+    "vitepress": "^1.6.4",
+    "vitest": "^1.0.0",
+    "vue": "^3.5.25"
   }
 }
