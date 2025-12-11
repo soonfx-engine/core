@@ -3,6 +3,7 @@ import { defineConfig } from 'vitepress'
 export default defineConfig({
   title: "SoonFx",
   description: "The TypeScript-first numeric engine for games.",
+  appearance: 'dark', // Force dark mode to match examples style
   outDir: '../docs',
   
   vite: {

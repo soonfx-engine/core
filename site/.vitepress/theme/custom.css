@@ -1,2 +1,69 @@
-/* Custom styles */
+:root {
+  /* Brand Colors - Matching --accent-color: #06b6d4 */
+  --vp-c-brand-1: #06b6d4;
+  --vp-c-brand-2: #22d3ee; /* Lighter shade */
+  --vp-c-brand-3: #0891b2; /* Darker shade */
+  
+  --vp-c-brand-soft: rgba(6, 182, 212, 0.16);
 
+  /* Background Colors - Matching --dark-bg: #0f172a and --card-bg: #1e293b */
+  --vp-c-bg: #0f172a;
+  --vp-c-bg-alt: #1e293b;
+  --vp-c-bg-soft: #1e293b;
+
+  /* Text Colors - Matching --text-light: #f1f5f9 and --text-gray: #94a3b8 */
+  --vp-c-text-1: #f1f5f9;
+  --vp-c-text-2: #94a3b8;
+  
+  /* Borders */
+  --vp-c-border: rgba(148, 163, 184, 0.2);
+  --vp-c-divider: rgba(148, 163, 184, 0.2);
+  --vp-c-gutter: rgba(148, 163, 184, 0.2);
+
+  /* Hero Name Gradient */
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: -webkit-linear-gradient(120deg, #06b6d4 30%, #7c3aed);
+}
+
+.dark {
+  --vp-c-bg: #0f172a;
+  --vp-c-bg-alt: #1e293b;
+  --vp-c-text-1: #f1f5f9;
+  --vp-c-text-2: #94a3b8;
+}
+
+/* Global Background Gradient to match examples */
+html {
+    background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%) fixed;
+}
+
+body {
+    background: transparent !important;
+}
+
+/* Navbar transparency to blend with gradient */
+.VPNav {
+    background-color: rgba(15, 23, 42, 0.8) !important;
+    backdrop-filter: blur(10px);
+}
+
+/* Sidebar background */
+.VPSidebar {
+    background-color: rgba(30, 41, 59, 0.95) !important; /* Slightly transparent card-bg */
+}
+
+/* Card/Box backgrounds */
+.VPFeature {
+    background-color: rgba(30, 41, 59, 0.5) !important;
+    border: 1px solid rgba(148, 163, 184, 0.1) !important;
+}
+
+/* Button Gradients */
+.VPButton.brand {
+    background: linear-gradient(135deg, #06b6d4, #7c3aed) !important;
+    border-color: transparent !important;
+}
+
+.VPButton.brand:hover {
+    box-shadow: 0 4px 12px rgba(6, 182, 212, 0.4);
+}
