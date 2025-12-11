@@ -5,6 +5,9 @@ hero:
   name: "SoonFx"
   text: "The TypeScript-first numeric engine for games."
   tagline: "Decouple logic from code, manage complex formulas with ease, and build robust RPG/SLG/Card systems."
+  image:
+    src: /editor.gif
+    alt: SoonFx Editor
   actions:
     - theme: brand
       text: Get Started

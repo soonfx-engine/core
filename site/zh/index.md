@@ -5,6 +5,9 @@ hero:
   name: "SoonFx"
   text: "TypeScript 优先的游戏数值引擎"
   tagline: "将逻辑与代码解耦，轻松管理复杂公式，构建稳健的 RPG/SLG/卡牌系统。"
+  image:
+    src: /editor.gif
+    alt: SoonFx Editor
   actions:
     - theme: brand
       text: 快速开始
