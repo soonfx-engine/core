@@ -2450,7 +2450,9 @@ export class fx {
           );
           formulaData.body = bodyView;
           //formulaData.isBindingFormula=true;
-          formulaData.body.isBindingFormula = true;
+          if (formulaData.body) {
+            formulaData.body.isBindingFormula = true;
+          }
           bodyView.formulaBody = formulaData;
           fx.Call.send(
             fx.Eve.SHIFT_ADD_FORMULA,
@@ -2888,7 +2890,9 @@ export class fx {
             dataItem.formulaY
           );
           formulaData.body = symbolBody;
-          formulaData.body.isBindingFormula = true;
+          if (formulaData.body) {
+            formulaData.body.isBindingFormula = true;
+          }
           symbolBody.formulaBody = formulaData;
 
           fx.Call.send(

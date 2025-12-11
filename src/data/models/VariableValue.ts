@@ -1,10 +1,4 @@
-﻿/**
- * VariableValue 数据模型
- * 版本: 2.0
- * 重构日期: 2024年12月
- * 提供变量值数据模型，支持多种数据类型和函数运算
- */
-
+﻿import { BasicBody } from "./BasicBody";
 import { NodeType } from "../../core/types/NodeType";
 import { EventManager as Eve } from "../../core/events/EventManager";
 import { getCatchValue } from "../../utils/index";
@@ -39,14 +33,11 @@ const getGlobalThis = () => {
  * 提供变量值的存储、计算和函数处理功能
  * 支持多种数据类型：宏、表格、逻辑列表、滑块等
  */
-export class VariableValue {
+export class VariableValue extends BasicBody {
   // ==================== 基础属性 ====================
 
   /** 变量名称 */
   name: string;
-
-  /** 唯一标识符 */
-  id: number;
 
   /** 类型标识符 */
   TID: string | number;
@@ -59,9 +50,6 @@ export class VariableValue {
 
   /** 节点类型 */
   type: any;
-
-  /** 操作符 */
-  operator: any = null;
 
   // ==================== AI相关 ====================
 
@@ -90,9 +78,6 @@ export class VariableValue {
   /** 逻辑数字列表 */
   logicalNumberList: Array<{ value: string }> = [];
 
-  /** 公式文本值 */
-  formulaTextValue: string;
-
   // ==================== 滑块控制 ====================
 
   /** 当前步数 */
@@ -109,9 +94,6 @@ export class VariableValue {
 
   // ==================== 层级和关系 ====================
 
-  /** 父节点 */
-  parent: any = null;
-
   /** 子单元格 */
   childCell: any;
 
@@ -124,13 +106,7 @@ export class VariableValue {
   /** 逻辑子数组 */
   logicalChildArray: any[] = [];
 
-  /** 树结构 */
-  tree: any[] = [];
-
   // ==================== 缓存和视图 ====================
-
-  /** 缓存值 */
-  cacheValue: any = null;
 
   /** 视图对象 */
   view: any = null;
@@ -150,9 +126,6 @@ export class VariableValue {
   enemyFlag: boolean = false;
 
   // ==================== 权重和统计 ====================
-
-  /** 是否为权重 */
-  isWeight: boolean = true;
 
   /** 统计值 */
   statistics: number = 0;
@@ -179,11 +152,6 @@ export class VariableValue {
   /** 降级值 */
   demoteValue: number = 0;
 
-  // ==================== 函数类型 ====================
-
-  /** 函数类型 */
-  funcType: number = 0;
-
   // ==================== 历史记录 ====================
 
   /** 历史目标 */
@@ -194,9 +162,9 @@ export class VariableValue {
   /** 是否系统显示 */
   isSystemShow: boolean = false;
 
-  // ==================== 构造器名称 ====================
-
-  /** 构造函数名称 */
+  /**
+   * 构造函数名称
+   */
   constructorName: string = "VariableValue";
 
   /**
@@ -213,6 +181,7 @@ export class VariableValue {
     type: any = null,
     operator: any = null
   ) {
+    super();
     this.name = name;
     this.value = value;
     this.type = type;
@@ -605,17 +574,15 @@ export class VariableValue {
       case HandleFunctionTypes["n*n"]:
         return value * value;
       case HandleFunctionTypes["n/n2"]:
-        return this.tree.length < 2 ? 0 : getVal(0) / getVal(1);
+        return this.divideValues(this.tree);
       case HandleFunctionTypes["n/(n+n2)"]:
-        return this.tree.length < 2 ? 0 : getVal(0) / (getVal(0) + getVal(1));
+        return this.divideBySum(this.tree);
       case HandleFunctionTypes["n/(n2-n)"]:
-        return this.tree.length < 2 ? 0 : getVal(0) / (getVal(1) - getVal(0));
+        return this.divideByDifference(this.tree);
       case HandleFunctionTypes["(n,e).(n1,e2)."]:
-        return this.weightedRandom();
+        return this.weightedRandom(this.tree);
       case HandleFunctionTypes["r(n~n2)"]:
-        return this.tree.length < 2
-          ? 0
-          : Math.random() * (getVal(1) - getVal(0)) + getVal(0);
+        return this.calculateRandom(this.tree);
       default:
         return value;
     }
@@ -626,37 +593,29 @@ export class VariableValue {
 
     switch (this.funcType) {
       case CommonFormulaTypes["攻击-防御"]:
-        return this.tree.length < 2 ? 0 : getVal(0) - getVal(1);
+        return this.attackMinusDefense(this.tree);
       case CommonFormulaTypes["攻击*攻击/(攻击-防御)"]:
-        return this.tree.length < 2
-          ? 0
-          : (getVal(0) * getVal(0)) / (getVal(0) + getVal(1));
+        return this.attackSquaredOverDiff(this.tree);
       case CommonFormulaTypes["(攻击-防御)*(攻击/防御)"]:
-        return this.tree.length < 2
-          ? 0
-          : (getVal(0) - getVal(1)) * (getVal(0) / getVal(1));
+        return this.diffTimesRatio(this.tree);
       case CommonFormulaTypes["攻击*攻击/防御"]:
-        return this.tree.length < 2 ? 0 : (getVal(0) * getVal(0)) / getVal(1);
+        return this.attackSquaredOverDefense(this.tree);
       case CommonFormulaTypes["攻击/防御"]:
-        return this.tree.length < 2 ? 0 : getVal(0) / getVal(1);
+        return this.attackOverDefense(this.tree);
       case CommonFormulaTypes["攻击*(1-系数)"]:
-        return this.tree.length < 2 ? 0 : getVal(0) * (1 - getVal(1));
+        return this.attackWithCoefficient(this.tree);
       case CommonFormulaTypes["护甲*系数/(1+护甲*系数)"]:
-        return this.tree.length < 2
-          ? 0
-          : (getVal(0) * getVal(1)) / (1 + getVal(0) * getVal(1));
+        return this.armorFormula(this.tree);
       case CommonFormulaTypes["攻击*受伤率"]:
-        return this.tree.length < 2 ? 0 : getVal(0) * getVal(1);
+        return this.attackWithDamageRate(this.tree);
       case CommonFormulaTypes["攻击/(1+防御*系数)"]:
-        return this.tree.length < 3
-          ? 0
-          : getVal(0) / (1 + getVal(1) * getVal(2));
+        return this.attackOverDefenseFormula(this.tree);
       case CommonFormulaTypes["攻击/防御*系数"]:
-        return this.tree.length < 3 ? 0 : (getVal(0) / getVal(1)) * getVal(2);
+        return this.attackRatioWithCoef(this.tree);
       case CommonFormulaTypes["攻击*系数/防御"]:
-        return this.tree.length < 3 ? 0 : (getVal(0) * getVal(2)) / getVal(1);
+        return this.attackCoefOverDefense(this.tree);
       case CommonFormulaTypes["攻击*(系数/防御)"]:
-        return this.tree.length < 3 ? 0 : getVal(0) * (getVal(2) / getVal(1));
+        return this.attackTimesCoefRatio(this.tree);
       default:
         return 0;
     }
@@ -681,7 +640,7 @@ export class VariableValue {
       case TriangleFunctionTypes.atan:
         return Math.atan(value);
       case TriangleFunctionTypes.atan2:
-        return this.tree.length < 2 ? 0 : Math.atan2(getVal(0), getVal(1));
+        return this.calculateAtan2(this.tree);
       default:
         return value;
     }
@@ -700,23 +659,23 @@ export class VariableValue {
 
     switch (this.funcType) {
       case LogicFunctionTypes["if(n1>n2)return{n3!n4}"]:
-        return getVal(0) > getVal(1) ? getVal(2) : getVal(3);
+        return this.ifGreater(this.tree);
       case LogicFunctionTypes["if(n1>=n2)return{n3!n4}"]:
-        return getVal(0) >= getVal(1) ? getVal(2) : getVal(3);
+        return this.ifGreaterEqual(this.tree);
       case LogicFunctionTypes["if(n1<n2)return{n3!n4}"]:
-        return getVal(0) < getVal(1) ? getVal(2) : getVal(3);
+        return this.ifLess(this.tree);
       case LogicFunctionTypes["if(n1<=n2)return{n3!n4}"]:
-        return getVal(0) <= getVal(1) ? getVal(2) : getVal(3);
+        return this.ifLessEqual(this.tree);
       case LogicFunctionTypes["if(n1==n2)return{n3!n4}"]:
-        return getVal(0) == getVal(1) ? getVal(2) : getVal(3);
+        return this.ifEqual(this.tree);
       case LogicFunctionTypes["if(n1!=n2)return{n3!n4}"]:
-        return getVal(0) != getVal(1) ? getVal(2) : getVal(3);
+        return this.ifNotEqual(this.tree);
       case LogicFunctionTypes[
         "for(var i=n;i<=n2;i++){if(i%n3==1){a++}c+=a+n4}"
       ]:
-        return this.complexForLoop();
+        return this.forLoop(this.tree);
       case LogicFunctionTypes["[n]"]:
-        return this.tree.length > 0 ? getVal(getVal(0)) : 0;
+        return this.arrayAccess(this.tree);
       default:
         return 0;
     }
@@ -735,11 +694,11 @@ export class VariableValue {
       case CommonFunctionTypes.sqrt:
         return Math.sqrt(value);
       case CommonFunctionTypes.max:
-        return Math.max(...this.tree.map((_, i) => Number(getVal(i))));
+        return this.calculateMax(this.tree);
       case CommonFunctionTypes.min:
-        return Math.min(...this.tree.map((_, i) => Number(getVal(i))));
+        return this.calculateMin(this.tree);
       case CommonFunctionTypes.pow:
-        return this.tree.length < 2 ? 0 : Math.pow(getVal(0), getVal(1));
+        return this.calculatePower(this.tree);
       case CommonFunctionTypes.log:
         return Math.log(value);
       case CommonFunctionTypes.exp:
@@ -764,15 +723,15 @@ export class VariableValue {
 
     switch (this.funcType) {
       case AlgorithmFunctionTypes.length:
-        return this.tree.length < 2 ? 0 : fx.length(getVal(0), getVal(1));
+        return this.calculateLength(this.tree);
       case AlgorithmFunctionTypes.distance:
-        return this.tree.length < 4 ? 0 : fx.distance(getVal(0), getVal(1), getVal(2), getVal(3));
+        return this.calculateDistance(this.tree);
       case AlgorithmFunctionTypes.dot:
-        return this.tree.length < 4 ? 0 : fx.dot(getVal(0), getVal(1), getVal(2), getVal(3));
+        return this.calculateDot(this.tree);
       case AlgorithmFunctionTypes.cross:
-        return this.tree.length < 4 ? 0 : fx.cross(getVal(0), getVal(1), getVal(2), getVal(3));
+        return this.calculateCross(this.tree);
       case AlgorithmFunctionTypes.mix:
-        return this.tree.length < 3 ? 0 : fx.mix(getVal(0), getVal(1), getVal(2));
+        return this.calculateMix(this.tree);
       default:
         return 0;
     }
@@ -783,84 +742,32 @@ export class VariableValue {
 
     switch (this.funcType) {
       case GameFormula1["战斗公式"]:
-        return this.tree.length < 3
-          ? 0
-          : getVal(0) *
-              getVal(2) *
-              (1 - 1 / (1 + (getVal(0) * getVal(2)) / (5 * getVal(1))));
+        return this.battleFormula(this.tree);
 
       case GameFormula2["人物生命"]:
-        return this.tree.length < 4
-          ? 0
-          : getVal(0) +
-              getVal(2) * getVal(1) +
-              (getVal(3) * (1 + getVal(1)) * getVal(1)) / 2;
+        return this.characterHealth(this.tree);
 
       case GameFormula2["近战素质物攻"]:
+        return this.meleeAttack(this.tree);
+
       case GameFormula2["远程素质物攻"]:
-        return this.tree.length < 5
-          ? 0
-          : getVal(0) * 2 +
-              Math.pow(getVal(0) / 10, 2) +
-              getVal(1) / 5 +
-              getVal(2) / 5 +
-              getVal(4) * getVal(3);
+        return this.rangedAttack(this.tree);
 
       case GameFormula2["法师素质物攻"]:
-        return this.tree.length < 1
-          ? 0
-          : getVal(0) * 2 + Math.pow(getVal(0) / 10, 2);
+        return this.mageAttack(this.tree);
 
       case GameFormula2["物防"]:
+        return this.physicalDefense(this.tree);
+
       case GameFormula2["魔防"]:
-        return this.value;
+        return this.magicDefense(this.tree);
 
       case GameFormula2["命中"] + 2: // 68
-        return this.tree.length < 2 ? 0 : getVal(0) + getVal(1);
+        return this.hitRate(this.tree);
 
       default:
         return this.value;
     }
-  }
-
-  private weightedRandom(): number {
-    if (this.tree.length % 2 !== 0) return 0;
-
-    let maxex = 0;
-    for (let i = 1; i < this.tree.length; i += 2) {
-      this.tree[i].indexex = getCatchValue(this.tree[i]) + maxex;
-      maxex += getCatchValue(this.tree[i]);
-    }
-
-    const randommaxex = Math.random() * maxex;
-
-    for (let i = 1; i < this.tree.length; i += 2) {
-      const prevIndex = i === 1 ? 0 : this.tree[i - 2].indexex;
-      if (randommaxex >= prevIndex && randommaxex < this.tree[i].indexex) {
-        return getCatchValue(this.tree[i - 1]);
-      }
-    }
-
-    return 0;
-  }
-
-  private complexForLoop(): number {
-    if (this.tree.length < 3) return 0;
-
-    let a = 0;
-    let c = 0;
-    const start = getCatchValue(this.tree[0]);
-    const end = getCatchValue(this.tree[1]);
-    const mod = getCatchValue(this.tree[2]);
-
-    for (let i = start; i <= end; i++) {
-      if (i % mod === 1) {
-        a++;
-      }
-      c += a + 2;
-    }
-
-    return c;
   }
 
   /**
@@ -1041,6 +948,7 @@ export class VariableValue {
       child.body = this.body;
     }
   }
+
 
   /**
    * 复制变量值

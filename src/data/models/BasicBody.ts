@@ -747,19 +747,19 @@ export class BasicBody {
    * @returns {number} 节点的数值，如果索引超出范围则返回0
    * @description 安全地获取指定索引位置的子节点值，并转换为数字类型
    */
-  private getTreeValue(tree: BasicBody[], index: number): number {
+  protected getTreeValue(tree: BasicBody[], index: number): number {
     return tree.length > index ? Number(getCatchValue(tree[index])) : 0;
   }
 
   /**
    * 计算最大值
    *
-   * @private
+   * @protected
    * @param {BasicBody[]} tree - 子节点数组
    * @returns {number} 所有子节点值中的最大值
    * @description 遍历所有子节点，找到其中的最大值
    */
-  private calculateMax(tree: BasicBody[]): number {
+  protected calculateMax(tree: BasicBody[]): number {
     const numbers = tree.map((node) => Number(getCatchValue(node)));
     return Math.max(...numbers);
   }
@@ -767,12 +767,12 @@ export class BasicBody {
   /**
    * 计算最小值
    *
-   * @private
+   * @protected
    * @param {BasicBody[]} tree - 子节点数组
    * @returns {number} 所有子节点值中的最小值
    * @description 遍历所有子节点，找到其中的最小值
    */
-  private calculateMin(tree: BasicBody[]): number {
+  protected calculateMin(tree: BasicBody[]): number {
     const numbers = tree.map((node) => Number(getCatchValue(node)));
     return Math.min(...numbers);
   }
@@ -780,12 +780,12 @@ export class BasicBody {
   /**
    * 计算幂运算
    *
-   * @private
+   * @protected
    * @param {BasicBody[]} tree - 子节点数组，至少需要2个节点
    * @returns {number} 第一个节点的值作为底数，第二个节点的值作为指数的幂运算结果
    * @description 计算 base^exponent，如果节点数量不足则返回0
    */
-  private calculatePower(tree: BasicBody[]): number {
+  protected calculatePower(tree: BasicBody[]): number {
     if (tree.length < 2) return 0;
     return Math.pow(this.getTreeValue(tree, 0), this.getTreeValue(tree, 1));
   }
@@ -793,12 +793,12 @@ export class BasicBody {
   /**
    * 计算随机数
    *
-   * @private
+   * @protected
    * @param {BasicBody[]} tree - 子节点数组，至少需要2个节点
    * @returns {number} 在指定范围内的随机数
    * @description 生成一个在 [min, max) 范围内的随机数，如果节点数量不足则返回0
    */
-  private calculateRandom(tree: BasicBody[]): number {
+  protected calculateRandom(tree: BasicBody[]): number {
     if (tree.length < 2) return 0;
     const min = this.getTreeValue(tree, 0);
     const max = this.getTreeValue(tree, 1);
@@ -808,12 +808,12 @@ export class BasicBody {
   /**
    * 计算除法
    *
-   * @private
+   * @protected
    * @param {BasicBody[]} tree - 子节点数组，至少需要2个节点
    * @returns {number} 第一个节点值除以第二个节点值的结果
    * @description 计算 a / b，如果节点数量不足则返回0
    */
-  private divideValues(tree: BasicBody[]): number {
+  protected divideValues(tree: BasicBody[]): number {
     if (tree.length < 2) return 0;
     return this.getTreeValue(tree, 0) / this.getTreeValue(tree, 1);
   }
@@ -821,12 +821,12 @@ export class BasicBody {
   /**
    * 计算除以和
    *
-   * @private
+   * @protected
    * @param {BasicBody[]} tree - 子节点数组，至少需要2个节点
    * @returns {number} a / (a + b) 的结果
    * @description 计算第一个值除以两个值之和，如果节点数量不足则返回0
    */
-  private divideBySum(tree: BasicBody[]): number {
+  protected divideBySum(tree: BasicBody[]): number {
     if (tree.length < 2) return 0;
     const a = this.getTreeValue(tree, 0);
     const b = this.getTreeValue(tree, 1);
@@ -836,12 +836,12 @@ export class BasicBody {
   /**
    * 计算除以差
    *
-   * @private
+   * @protected
    * @param {BasicBody[]} tree - 子节点数组，至少需要2个节点
    * @returns {number} a / (b - a) 的结果
    * @description 计算第一个值除以两个值之差，如果节点数量不足则返回0
    */
-  private divideByDifference(tree: BasicBody[]): number {
+  protected divideByDifference(tree: BasicBody[]): number {
     if (tree.length < 2) return 0;
     const a = this.getTreeValue(tree, 0);
     const b = this.getTreeValue(tree, 1);
@@ -851,13 +851,13 @@ export class BasicBody {
   /**
    * 计算加权随机数
    *
-   * @private
+   * @protected
    * @param {BasicBody[]} tree - 子节点数组，必须是偶数个节点
    * @returns {number} 根据权重随机选择的值
    * @description 根据权重进行随机选择，节点数组格式为 [值1, 权重1, 值2, 权重2, ...]
    * 如果节点数量不是偶数则返回0
    */
-  private weightedRandom(tree: BasicBody[]): number {
+  protected weightedRandom(tree: BasicBody[]): number {
     if (tree.length % 2 !== 0) return 0;
 
     let maxWeight = 0;
@@ -886,13 +886,13 @@ export class BasicBody {
   /**
    * 攻击减防御公式
    *
-   * @private
+   * @protected
    * @param {BasicBody[]} tree - 子节点数组，至少需要2个节点 [攻击力, 防御力]
    * @returns {number} 攻击力减去防御力的结果
    * @description 基础战斗伤害计算公式：伤害 = 攻击力 - 防御力
    * 这是最简单的伤害计算方式，适用于基础战斗系统
    */
-  private attackMinusDefense(tree: BasicBody[]): number {
+  protected attackMinusDefense(tree: BasicBody[]): number {
     if (tree.length < 2) return 0;
     return this.getTreeValue(tree, 0) - this.getTreeValue(tree, 1);
   }
@@ -900,13 +900,13 @@ export class BasicBody {
   /**
    * 攻击平方除以攻击加防御公式
    *
-   * @private
+   * @protected
    * @param {BasicBody[]} tree - 子节点数组，至少需要2个节点 [攻击力, 防御力]
    * @returns {number} 攻击力平方除以(攻击力+防御力)的结果
    * @description 复杂战斗伤害公式：伤害 = 攻击力² / (攻击力 + 防御力)
    * 这种公式在高攻击力时伤害增长更快，但防御力仍有一定效果
    */
-  private attackSquaredOverDiff(tree: BasicBody[]): number {
+  protected attackSquaredOverDiff(tree: BasicBody[]): number {
     if (tree.length < 2) return 0;
     const attack = this.getTreeValue(tree, 0);
     const defense = this.getTreeValue(tree, 1);
@@ -916,13 +916,13 @@ export class BasicBody {
   /**
    * 差值乘以比率公式
    *
-   * @private
+   * @protected
    * @param {BasicBody[]} tree - 子节点数组，至少需要2个节点 [攻击力, 防御力]
    * @returns {number} (攻击力-防御力) * (攻击力/防御力) 的结果
    * @description 复合战斗伤害公式：伤害 = (攻击力 - 防御力) × (攻击力 / 防御力)
    * 结合了线性差值和比率计算，攻击力优势时伤害会显著增加
    */
-  private diffTimesRatio(tree: BasicBody[]): number {
+  protected diffTimesRatio(tree: BasicBody[]): number {
     if (tree.length < 2) return 0;
     const attack = this.getTreeValue(tree, 0);
     const defense = this.getTreeValue(tree, 1);
@@ -932,13 +932,13 @@ export class BasicBody {
   /**
    * 攻击平方除以防御公式
    *
-   * @private
+   * @protected
    * @param {BasicBody[]} tree - 子节点数组，至少需要2个节点 [攻击力, 防御力]
    * @returns {number} 攻击力平方除以防御力的结果
    * @description 高攻击力伤害公式：伤害 = 攻击力² / 防御力
    * 攻击力对伤害的影响是二次方的，防御力效果相对较弱
    */
-  private attackSquaredOverDefense(tree: BasicBody[]): number {
+  protected attackSquaredOverDefense(tree: BasicBody[]): number {
     if (tree.length < 2) return 0;
     const attack = this.getTreeValue(tree, 0);
     const defense = this.getTreeValue(tree, 1);
@@ -948,13 +948,13 @@ export class BasicBody {
   /**
    * 攻击除以防御公式
    *
-   * @private
+   * @protected
    * @param {BasicBody[]} tree - 子节点数组，至少需要2个节点 [攻击力, 防御力]
    * @returns {number} 攻击力除以防御力的结果
    * @description 比率伤害公式：伤害 = 攻击力 / 防御力
    * 伤害完全取决于攻击力和防御力的比率，适用于平衡性要求较高的战斗系统
    */
-  private attackOverDefense(tree: BasicBody[]): number {
+  protected attackOverDefense(tree: BasicBody[]): number {
     if (tree.length < 2) return 0;
     return this.getTreeValue(tree, 0) / this.getTreeValue(tree, 1);
   }
@@ -962,13 +962,13 @@ export class BasicBody {
   /**
    * 攻击乘以系数公式
    *
-   * @private
+   * @protected
    * @param {BasicBody[]} tree - 子节点数组，至少需要2个节点 [攻击力, 系数]
    * @returns {number} 攻击力乘以(1-系数)的结果
    * @description 减伤攻击公式：伤害 = 攻击力 × (1 - 减伤系数)
    * 系数表示减伤百分比，适用于有护甲或减伤效果的战斗系统
    */
-  private attackWithCoefficient(tree: BasicBody[]): number {
+  protected attackWithCoefficient(tree: BasicBody[]): number {
     if (tree.length < 2) return 0;
     return this.getTreeValue(tree, 0) * (1 - this.getTreeValue(tree, 1));
   }
@@ -976,25 +976,25 @@ export class BasicBody {
   /**
    * 护甲公式
    *
-   * @private
+   * @protected
    * @param {BasicBody[]} tree - 子节点数组，至少需要2个节点 [护甲值, 系数]
    * @returns {number} 护甲减伤百分比
    * @description 护甲减伤公式：减伤率 = (护甲 × 系数) / (1 + 护甲 × 系数)
    * 这是经典的护甲减伤公式，护甲越高减伤效果越明显，但有递减效应
    */
-  private armorFormula(tree: BasicBody[]): number {
+  protected armorFormula(tree: BasicBody[]): number {
     if (tree.length < 2) return 0;
     const armor = this.getTreeValue(tree, 0);
     const coef = this.getTreeValue(tree, 1);
     return (armor * coef) / (1 + armor * coef);
   }
 
-  private attackWithDamageRate(tree: BasicBody[]): number {
+  protected attackWithDamageRate(tree: BasicBody[]): number {
     if (tree.length < 2) return 0;
     return this.getTreeValue(tree, 0) * this.getTreeValue(tree, 1);
   }
 
-  private attackOverDefenseFormula(tree: BasicBody[]): number {
+  protected attackOverDefenseFormula(tree: BasicBody[]): number {
     if (tree.length < 3) return 0;
     const attack = this.getTreeValue(tree, 0);
     const defense = this.getTreeValue(tree, 1);
@@ -1002,7 +1002,7 @@ export class BasicBody {
     return attack / (1 + defense * coef);
   }
 
-  private attackRatioWithCoef(tree: BasicBody[]): number {
+  protected attackRatioWithCoef(tree: BasicBody[]): number {
     if (tree.length < 3) return 0;
     return (
       (this.getTreeValue(tree, 0) / this.getTreeValue(tree, 1)) *
@@ -1010,7 +1010,7 @@ export class BasicBody {
     );
   }
 
-  private attackCoefOverDefense(tree: BasicBody[]): number {
+  protected attackCoefOverDefense(tree: BasicBody[]): number {
     if (tree.length < 3) return 0;
     return (
       (this.getTreeValue(tree, 0) * this.getTreeValue(tree, 2)) /
@@ -1018,7 +1018,7 @@ export class BasicBody {
     );
   }
 
-  private attackTimesCoefRatio(tree: BasicBody[]): number {
+  protected attackTimesCoefRatio(tree: BasicBody[]): number {
     if (tree.length < 3) return 0;
     return (
       this.getTreeValue(tree, 0) *
@@ -1027,55 +1027,55 @@ export class BasicBody {
   }
 
   // Trigonometric helpers
-  private calculateAtan2(tree: BasicBody[]): number {
+  protected calculateAtan2(tree: BasicBody[]): number {
     if (tree.length < 2) return 0;
     return Math.atan2(this.getTreeValue(tree, 0), this.getTreeValue(tree, 1));
   }
 
   // Logic helpers
-  private ifGreater(tree: BasicBody[]): number {
+  protected ifGreater(tree: BasicBody[]): number {
     if (tree.length < 4) return 0;
     return this.getTreeValue(tree, 0) > this.getTreeValue(tree, 1)
       ? this.getTreeValue(tree, 2)
       : this.getTreeValue(tree, 3);
   }
 
-  private ifGreaterEqual(tree: BasicBody[]): number {
+  protected ifGreaterEqual(tree: BasicBody[]): number {
     if (tree.length < 4) return 0;
     return this.getTreeValue(tree, 0) >= this.getTreeValue(tree, 1)
       ? this.getTreeValue(tree, 2)
       : this.getTreeValue(tree, 3);
   }
 
-  private ifLess(tree: BasicBody[]): number {
+  protected ifLess(tree: BasicBody[]): number {
     if (tree.length < 4) return 0;
     return this.getTreeValue(tree, 0) < this.getTreeValue(tree, 1)
       ? this.getTreeValue(tree, 2)
       : this.getTreeValue(tree, 3);
   }
 
-  private ifLessEqual(tree: BasicBody[]): number {
+  protected ifLessEqual(tree: BasicBody[]): number {
     if (tree.length < 4) return 0;
     return this.getTreeValue(tree, 0) <= this.getTreeValue(tree, 1)
       ? this.getTreeValue(tree, 2)
       : this.getTreeValue(tree, 3);
   }
 
-  private ifEqual(tree: BasicBody[]): number {
+  protected ifEqual(tree: BasicBody[]): number {
     if (tree.length < 4) return 0;
     return this.getTreeValue(tree, 0) === this.getTreeValue(tree, 1)
       ? this.getTreeValue(tree, 2)
       : this.getTreeValue(tree, 3);
   }
 
-  private ifNotEqual(tree: BasicBody[]): number {
+  protected ifNotEqual(tree: BasicBody[]): number {
     if (tree.length < 4) return 0;
     return this.getTreeValue(tree, 0) !== this.getTreeValue(tree, 1)
       ? this.getTreeValue(tree, 2)
       : this.getTreeValue(tree, 3);
   }
 
-  private forLoop(tree: BasicBody[]): number {
+  protected forLoop(tree: BasicBody[]): number {
     if (tree.length < 4) return 0;
     let a = 0;
     let c = 0;
@@ -1093,19 +1093,19 @@ export class BasicBody {
     return c;
   }
 
-  private arrayAccess(tree: BasicBody[]): number {
+  protected arrayAccess(tree: BasicBody[]): number {
     if (tree.length < 2) return 0;
     const index = this.getTreeValue(tree, 0);
     return this.getTreeValue(tree, index);
   }
 
   // Algorithm helpers
-  private calculateLength(tree: BasicBody[]): number {
+  protected calculateLength(tree: BasicBody[]): number {
     if (tree.length < 2) return 0;
     return fx.length(this.getTreeValue(tree, 0), this.getTreeValue(tree, 1));
   }
 
-  private calculateDistance(tree: BasicBody[]): number {
+  protected calculateDistance(tree: BasicBody[]): number {
     if (tree.length < 4) return 0;
     return fx.distance(
       this.getTreeValue(tree, 0),
@@ -1115,7 +1115,7 @@ export class BasicBody {
     );
   }
 
-  private calculateDot(tree: BasicBody[]): number {
+  protected calculateDot(tree: BasicBody[]): number {
     if (tree.length < 4) return 0;
     return fx.dot(
       this.getTreeValue(tree, 0),
@@ -1125,7 +1125,7 @@ export class BasicBody {
     );
   }
 
-  private calculateCross(tree: BasicBody[]): number {
+  protected calculateCross(tree: BasicBody[]): number {
     if (tree.length < 4) return 0;
     return fx.cross(
       this.getTreeValue(tree, 0),
@@ -1135,7 +1135,7 @@ export class BasicBody {
     );
   }
 
-  private calculateMix(tree: BasicBody[]): number {
+  protected calculateMix(tree: BasicBody[]): number {
     if (tree.length < 3) return 0;
     return fx.mix(
       this.getTreeValue(tree, 0),
@@ -1145,7 +1145,7 @@ export class BasicBody {
   }
 
   // Game formula helpers
-  private battleFormula(tree: BasicBody[]): number {
+  protected battleFormula(tree: BasicBody[]): number {
     if (tree.length < 3) return 0;
     const attack = this.getTreeValue(tree, 0);
     const defense = this.getTreeValue(tree, 1);
@@ -1156,13 +1156,13 @@ export class BasicBody {
   /**
    * 人物生命值公式
    *
-   * @private
+   * @protected
    * @param {BasicBody[]} tree - 子节点数组，需要4个节点 [基础生命, 等级, 系数A, 系数B]
    * @returns {number} 计算后的人物生命值
    * @description 人物生命值计算公式：生命值 = 基础生命 + 系数A × 等级 + 系数B × (1 + 等级) × 等级 / 2
    * 这是一个二次增长的生命值公式，等级越高生命值增长越快，适用于RPG游戏
    */
-  private characterHealth(tree: BasicBody[]): number {
+  protected characterHealth(tree: BasicBody[]): number {
     if (tree.length < 4) return 0;
     const base = this.getTreeValue(tree, 0);
     const level = this.getTreeValue(tree, 1);
@@ -1174,13 +1174,13 @@ export class BasicBody {
   /**
    * 近战物理攻击力公式
    *
-   * @private
+   * @protected
    * @param {BasicBody[]} tree - 子节点数组，需要5个节点 [力量, 灵巧, 幸运, 等级, 职业攻击系数]
    * @returns {number} 计算后的近战物理攻击力
    * @description 近战攻击力计算公式：攻击力 = 力量×2 + (力量/10)² + 灵巧/5 + 幸运/5 + 职业系数×等级
    * 力量是主要属性，有线性增长和二次增长两部分，其他属性提供辅助加成
    */
-  private meleeAttack(tree: BasicBody[]): number {
+  protected meleeAttack(tree: BasicBody[]): number {
     if (tree.length < 5) return 0;
     const str = this.getTreeValue(tree, 0);
     const dex = this.getTreeValue(tree, 1);
@@ -1195,13 +1195,13 @@ export class BasicBody {
   /**
    * 远程物理攻击力公式
    *
-   * @private
+   * @protected
    * @param {BasicBody[]} tree - 子节点数组，需要5个节点 [灵巧, 力量, 幸运, 等级, 职业攻击系数]
    * @returns {number} 计算后的远程物理攻击力
    * @description 远程攻击力计算公式：攻击力 = 灵巧×2 + (灵巧/10)² + 力量/5 + 幸运/5 + 职业系数×等级
    * 灵巧是主要属性，有线性增长和二次增长两部分，力量提供辅助加成
    */
-  private rangedAttack(tree: BasicBody[]): number {
+  protected rangedAttack(tree: BasicBody[]): number {
     if (tree.length < 5) return 0;
     const dex = this.getTreeValue(tree, 0);
     const str = this.getTreeValue(tree, 1);
@@ -1216,42 +1216,42 @@ export class BasicBody {
   /**
    * 法师物理攻击力公式
    *
-   * @private
+   * @protected
    * @param {BasicBody[]} tree - 子节点数组，需要1个节点 [力量]
    * @returns {number} 计算后的法师物理攻击力
    * @description 法师攻击力计算公式：攻击力 = 力量×2 + (力量/10)²
    * 法师的物理攻击力主要依赖力量属性，有线性增长和二次增长两部分
    */
-  private mageAttack(tree: BasicBody[]): number {
+  protected mageAttack(tree: BasicBody[]): number {
     if (tree.length < 1) return 0;
     const str = this.getTreeValue(tree, 0);
     return str * 2 + Math.pow(str / 10, 2);
   }
 
-  private physicalDefense(tree: BasicBody[]): number {
+  protected physicalDefense(tree: BasicBody[]): number {
     return this.value;
   }
 
-  private magicDefense(tree: BasicBody[]): number {
+  protected magicDefense(tree: BasicBody[]): number {
     return this.value;
   }
 
-  private hitRate(tree: BasicBody[]): number {
+  protected hitRate(tree: BasicBody[]): number {
     if (tree.length < 2) return 0;
     return this.getTreeValue(tree, 0) + this.getTreeValue(tree, 1);
   }
 
-  private dodgeRate(tree: BasicBody[]): number {
+  protected dodgeRate(tree: BasicBody[]): number {
     if (tree.length < 2) return 0;
     return this.getTreeValue(tree, 0) + this.getTreeValue(tree, 1);
   }
 
-  private jobPointGrowth(tree: BasicBody[]): number {
+  protected jobPointGrowth(tree: BasicBody[]): number {
     if (tree.length < 2) return 0;
     return 1 + this.getTreeValue(tree, 0) / this.getTreeValue(tree, 1);
   }
 
-  private finalMeleeAttack(tree: BasicBody[]): number {
+  protected finalMeleeAttack(tree: BasicBody[]): number {
     if (tree.length < 8) return 0;
     const str = this.getTreeValue(tree, 0);
     const dex = this.getTreeValue(tree, 1);
@@ -1274,7 +1274,7 @@ export class BasicBody {
     );
   }
 
-  private finalRangedAttack(tree: BasicBody[]): number {
+  protected finalRangedAttack(tree: BasicBody[]): number {
     if (tree.length < 8) return 0;
     const dex = this.getTreeValue(tree, 0);
     const str = this.getTreeValue(tree, 1);
@@ -1297,7 +1297,7 @@ export class BasicBody {
     );
   }
 
-  private finalMagicAttack(tree: BasicBody[]): number {
+  protected finalMagicAttack(tree: BasicBody[]): number {
     if (tree.length < 6) return 0;
     const intel = this.getTreeValue(tree, 0);
     const equipMagic = this.getTreeValue(tree, 1);
@@ -1316,35 +1316,35 @@ export class BasicBody {
     );
   }
 
-  private physicalDamage(tree: BasicBody[]): number {
+  protected physicalDamage(tree: BasicBody[]): number {
     if (tree.length < 2) return 0;
     const attack = this.getTreeValue(tree, 0);
     const defense = this.getTreeValue(tree, 1);
     return (attack * (4000 + defense)) / (4000 + defense * 10);
   }
 
-  private magicDamage(tree: BasicBody[]): number {
+  protected magicDamage(tree: BasicBody[]): number {
     if (tree.length < 2) return 0;
     const magic = this.getTreeValue(tree, 0);
     const mDefense = this.getTreeValue(tree, 1);
     return (magic * (1000 + mDefense)) / (1000 + mDefense * 10);
   }
 
-  private hitChance(tree: BasicBody[]): number {
+  protected hitChance(tree: BasicBody[]): number {
     if (tree.length < 2) return 0;
     const hit = this.getTreeValue(tree, 0);
     const dodge = this.getTreeValue(tree, 1);
     return (hit - dodge + 80) / 100;
   }
 
-  private critChance(tree: BasicBody[]): number {
+  protected critChance(tree: BasicBody[]): number {
     if (tree.length < 2) return 0;
     const crit = this.getTreeValue(tree, 0);
     const resist = this.getTreeValue(tree, 1);
     return (crit - resist) / 100;
   }
 
-  private growthFormula(tree: BasicBody[]): number {
+  protected growthFormula(tree: BasicBody[]): number {
     if (tree.length < 2) return 0;
     const level = this.getTreeValue(tree, 0);
     const growthRate = this.getTreeValue(tree, 1);
