@@ -5,6 +5,12 @@ export default defineConfig({
   description: "The TypeScript-first numeric engine for games.",
   outDir: '../docs',
   
+  vite: {
+    build: {
+      emptyOutDir: false
+    }
+  },
+
   themeConfig: {
     logo: '/logo.svg', // Assuming we'll have one
     socialLinks: [
