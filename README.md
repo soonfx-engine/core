@@ -1,6 +1,7 @@
 <div align="center">
 
 # SoonFx Runtime
+ 
 
 > **The TypeScript-first numeric engine for games.**  
 > Decouple logic from code, manage complex formulas with ease, and build robust RPG/SLG/Card systems.
@@ -20,6 +21,8 @@
 ---
 
 ## ❓ What is SoonFx?
+
+<img src="assets/editor.gif" align="right" width="250" style="margin-left: 6px;" alt="SoonFx Editor Preview">
 
 SoonFx is a **TypeScript-first numeric engine** designed specifically for games. It addresses the common challenge of managing complex game logic, formulas, and numeric relationships that often become hardcoded "spaghetti code."
 

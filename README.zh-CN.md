@@ -20,7 +20,7 @@
 ---
 
 ## ❓ 什么是 SoonFx?
-
+<img src="assets/editor.gif" align="right" width="250" style="margin-left: 10px;" alt="SoonFx Editor Preview">
 SoonFx 是一个专为游戏设计的 **TypeScript 优先的数值引擎**。它旨在解决管理复杂游戏逻辑、公式和数值关系时常遇到的挑战，避免逻辑变成难以维护的“面条代码”。
 
 ### 🚫 痛点
