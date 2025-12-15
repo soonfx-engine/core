@@ -34,6 +34,7 @@
     "rpg",
     "strategy-game",
     "turn-based",
+    "turn-based-game",
     "formula-engine",
     "expression-parser",
     "battle-system",
@@ -41,7 +42,8 @@
     "numerical-computation",
     "zero-dependency",
     "game-math",
-    "character-attributes"
+    "character-attributes",
+    "game-development"
   ],
   "author": "SoonFx Team <jiyisoon@163.com> (https://soonfx.dev)",
   "license": "Apache-2.0",
