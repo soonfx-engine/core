@@ -11,6 +11,9 @@
  * @returns 是否为有效数字
  */
 export function isNumber(value: unknown): value is number {
+  if (typeof value === 'string') {
+    return !isNaN(Number(value)) && isFinite(Number(value));
+  }
   return typeof value === 'number' && !isNaN(value) && isFinite(value);
 }
 

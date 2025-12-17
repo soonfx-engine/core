@@ -26,7 +26,7 @@ describe('fx (System)', () => {
       expect(fx.isNumber(-123.45)).toBe(true);
       expect(fx.isNumber(Infinity)).toBe(false);
       expect(fx.isNumber(NaN)).toBe(false);
-      expect(fx.isNumber('123')).toBe(false);
+      expect(fx.isNumber('123')).toBe(true);
       expect(fx.isNumber('abc')).toBe(false);
       expect(fx.isNumber(null)).toBe(false);
       expect(fx.isNumber(undefined)).toBe(false);
