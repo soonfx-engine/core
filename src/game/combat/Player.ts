@@ -708,8 +708,7 @@ export class Player {
     const obj = this.getPropertyObject(site);
 
     if (obj != null) {
-      return fx
-        .getBody(this.playerData, fx.parseAbsoluteAddress(site), value)
+      return (fx.getBody(this.playerData, fx.parseAbsoluteAddress(site), value) as any)
         .getValue();
     } else {
       console.log("没有找到属性");
