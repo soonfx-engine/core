@@ -49,6 +49,98 @@ import { Message } from "../../communication/messaging/Message";
 import { NodeType } from "../../core/types/NodeType";
 import { MathUtils } from "../../utils/MathUtils";
 
+// ==================== 类型定义和接口 ====================
+
+/**
+ * 运算符优先级映射接口
+ */
+interface OperatorPrecedence {
+  "+": number;
+  "-": number;
+  "*": number;
+  "/": number;
+  "%": number;
+  "^": number;
+  ">": number;
+  "<": number;
+  ">=": number;
+  "<=": number;
+  "==": number;
+  "!=": number;
+}
+
+/**
+ * 运算符类型
+ */
+type OperatorKey = keyof OperatorPrecedence;
+
+/**
+ * 表格数据接口
+ */
+interface SheetDataItem {
+  name: string;
+  data: string | unknown;
+  [key: string]: unknown;
+}
+
+/**
+ * 逻辑项接口
+ */
+interface LogicalItem {
+  TID: string | number;
+  name: string;
+  value: unknown;
+  type: unknown;
+  macros: unknown;
+  operator: unknown;
+  enemyFlag: unknown;
+  source: unknown;
+  tag: unknown;
+  statistics: unknown;
+  upDateValue: unknown;
+  demoteValue: unknown;
+  funcType: unknown;
+  isLogicalOpen: unknown;
+  isDragging: unknown;
+  [key: string]: unknown;
+}
+
+/**
+ * 事件处理器类型
+ */
+type EventHandler = (e: unknown) => void;
+
+/**
+ * Body 数组项类型（可以是多种类型的联合）
+ * 使用更灵活的类型以支持动态属性访问
+ */
+type BodyArrayItem = VariableValue | Folder | BillboardLayer | ChartsLayer | BasicBody | Record<string, unknown>;
+
+/**
+ * 数据项接口（用于解析库内容）
+ */
+interface DataItem {
+  type?: unknown;
+  site?: string;
+  isFile?: boolean;
+  isSystemShow?: boolean;
+  operationArray?: unknown[];
+  name?: string;
+  sheetData?: unknown;
+  isBoard?: boolean;
+  isXlsx?: boolean;
+  index?: number;
+  selectedOutputInfo?: string;
+  [key: string]: unknown;
+}
+
+/**
+ * 类型守卫：检查是否为 DataItem
+ */
+function isDataItem(item: unknown): item is DataItem {
+  return typeof item === 'object' && item !== null;
+}
+
 /**
  * 测试基类
  * 用于系统测试和验证
@@ -498,21 +590,22 @@ export class fx {
    * @param address
    */
   static getLibraryBody = function (
-    library: any[],
-    array: any[],
+    library: BodyArrayItem[],
+    array: BodyArrayItem[],
     address: string
   ): void {
     for (let i = 0; i < array.length; i++) {
-      if (array[i].absoluteAddress == null) {
-        array[i].absoluteAddress = fx.getAbsoluteAddress(array[i]);
+      const item = array[i] as Record<string, unknown>;
+      if (item.absoluteAddress == null) {
+        item.absoluteAddress = fx.getAbsoluteAddress(array[i]);
       }
 
-      if (array[i].absoluteAddress == address) {
+      if (item.absoluteAddress == address) {
         library.push(array[i]);
         return;
       }
-      if (array[i].isFolder) {
-        fx.getLibraryBody(library, array[i].tree, address);
+      if (item.isFolder && 'tree' in item && Array.isArray(item.tree)) {
+        fx.getLibraryBody(library, item.tree as BodyArrayItem[], address);
       }
     }
   };
@@ -520,7 +613,7 @@ export class fx {
   static mapToJSON = function (map: Map<any, any>): string {
     if (!map) return "{}";
     return JSON.stringify(
-      [...map].reduce((obj, [key, value]) => {
+      [...map].reduce((obj: Record<string, any>, [key, value]) => {
         const newValue = { ...value };
         const bodyTreeItem = newValue.source;
         if (bodyTreeItem) {
@@ -562,16 +655,18 @@ export class fx {
    * @param saveArray
    * @param bodyArray
    */
-  static addLibraryBody = function (saveArray: any[], bodyArray: any[]): void {
+  static addLibraryBody = function (saveArray: unknown[], bodyArray: BodyArrayItem[]): void {
     for (let i = 0; i < bodyArray.length; i++) {
-      const bodyItem = bodyArray[i];
-      let newOriginData = bodyItem.sheetData?.originData;
+      const bodyItem = bodyArray[i] as Record<string, unknown>;
+      const sheetData = bodyItem.sheetData as { originData?: unknown } | undefined;
+      let newOriginData = sheetData?.originData as Record<string, unknown> | undefined;
       if (newOriginData) {
         newOriginData = { ...newOriginData };
         newOriginData.sheets = [
-          ...newOriginData.sheets.map((item2) => {
-            return { ...item2, data: fx.mapToJSON(item2.data) };
-          }),
+          ...(Array.isArray(newOriginData.sheets) ? newOriginData.sheets.map((item2: SheetDataItem) => {
+            const data = item2.data;
+            return { ...item2, data: data instanceof Map ? fx.mapToJSON(data) : (typeof data === 'string' ? data : JSON.stringify(data)) };
+          }) : []),
         ];
       }
       if (bodyItem instanceof fx.VariableValue) {
@@ -655,48 +750,51 @@ export class fx {
    * @param data
    * @param init
    */
-  static parseLibraryBody = function (data: any[], init: boolean): void {
+  static parseLibraryBody = function (data: unknown[], init: boolean): void {
     for (let i = 0; i < data.length; i++) {
       const dataItem = data[i];
+      if (!isDataItem(dataItem)) continue;
       if (dataItem.type == NodeType.CalculationLayer) {
-        var bodyArray = [];
-        fx.getLibraryBody(bodyArray, fx.targetFolder.tree, dataItem.site);
+        const bodyArray: BodyArrayItem[] = [];
+        fx.getLibraryBody(bodyArray, fx.targetFolder.tree, dataItem.site ?? '');
         fx.editBody = bodyArray[0];
         fx.selectBody = fx.editBody;
 
         fx.targetStoragePool = fx.editBody.childBodyArray;
-        fx.editBody.isSystemShow = dataItem.isSystemShow;
-        fx.parseStageBody(dataItem.operationArray);
+        fx.editBody.isSystemShow = dataItem.isSystemShow ?? false;
+        fx.parseStageBody(dataItem.operationArray ?? []);
       } else if (
         dataItem.type == 0 ||
         dataItem.type == NodeType.Variable ||
         dataItem.type == 2 ||
         dataItem.type == 3
       ) {
-        var bodyArray = [];
-        fx.getLibraryBody(bodyArray, fx.targetFolder.tree, dataItem.site);
+        const bodyArray: BodyArrayItem[] = [];
+        fx.getLibraryBody(bodyArray, fx.targetFolder.tree, dataItem.site ?? '');
         fx.editBody = bodyArray[0];
         fx.selectBody = fx.editBody;
         fx.targetStoragePool = fx.stageStoragePool;
-        fx.parseStageBody(dataItem.operationArray);
+        fx.parseStageBody(dataItem.operationArray ?? []);
       } else if (dataItem.isFile == true) {
-        var bodyArray = [];
-        fx.getLibraryBody(bodyArray, fx.targetFolder.tree, dataItem.site);
+        const bodyArray: BodyArrayItem[] = [];
+        fx.getLibraryBody(bodyArray, fx.targetFolder.tree, dataItem.site ?? '');
         fx.editBody = bodyArray[0];
         const parent = bodyArray[0];
-        for (let j = 0; j < dataItem.operationArray.length; j++) {
-          const dataItemOperation = dataItem.operationArray[j];
+        const operationArray = Array.isArray(dataItem.operationArray) ? dataItem.operationArray : [];
+        for (let j = 0; j < operationArray.length; j++) {
+          const dataItemOperation = operationArray[j];
+          if (!isDataItem(dataItemOperation)) continue;
           if (dataItemOperation.type == NodeType.CalculationLayer) {
-            var bodyArray = [];
+            const bodyArray: BodyArrayItem[] = [];
             fx.getLibraryBody(
               bodyArray,
               fx.targetFolder.tree,
-              dataItemOperation.site
+              dataItemOperation.site ?? ''
             );
             fx.editBody = bodyArray[0];
             fx.selectBody = bodyArray[0];
             fx.targetStoragePool = (bodyArray[0] as any).childBodyArray;
-            fx.parseStageBody(dataItemOperation.operationArray);
+            fx.parseStageBody(dataItemOperation.operationArray ?? []);
             fx.editBody = parent;
             fx.editBody.isSystemShow = dataItemOperation.isSystemShow;
           } else if (dataItemOperation.isBoard == true) {
@@ -709,14 +807,14 @@ export class fx {
             fx.Call.send(fx.Eve.SHIFT_ADD_CHARTS, dataItemOperation, null);
           }
           if (dataItemOperation.isFile == true) {
-            var bodyArray = [];
+            const bodyArray: BodyArrayItem[] = [];
             fx.getLibraryBody(
               bodyArray,
               fx.targetFolder.tree,
-              dataItemOperation.site
+              dataItemOperation.site ?? ''
             );
             fx.editBody = bodyArray[0];
-            fx.parseLibraryBody(dataItemOperation.operationArray, false);
+            fx.parseLibraryBody(dataItemOperation.operationArray ?? [], false);
           }
         }
         fx.editBody = null;
@@ -835,12 +933,12 @@ export class fx {
                 ? JSON.parse(dataItemOperation.sheetData)
                 : dataItemOperation.sheetData;
             if (parsedData?.sheets) {
-              parsedData.sheets = parsedData.sheets.map((sheet) => {
-                const data = JSON.parse(sheet.data);
+              parsedData.sheets = parsedData.sheets.map((sheet: SheetDataItem) => {
+                const data = JSON.parse(typeof sheet.data === 'string' ? sheet.data : JSON.stringify(sheet.data));
                 Object.values(data).forEach((item: any) => {
                   if (item?.source) {
                     const dataTreeItem = item.source;
-                    const bodyArray = [];
+                    const bodyArray: BodyArrayItem[] = [];
                     fx.getLibraryBody(
                       bodyArray,
                       fx.targetFolder.tree,
@@ -964,12 +1062,12 @@ export class fx {
             ? JSON.parse(dataItem.sheetData)
             : dataItem.sheetData;
         if (parsedData?.sheets) {
-          parsedData.sheets = parsedData.sheets.map((sheet) => {
-            const data = JSON.parse(sheet.data);
+          parsedData.sheets = parsedData.sheets.map((sheet: SheetDataItem) => {
+            const data = JSON.parse(typeof sheet.data === 'string' ? sheet.data : JSON.stringify(sheet.data));
             Object.values(data).forEach((item: any) => {
               if (item?.source) {
                 const dataTreeItem = item.source;
-                const bodyArray = [];
+                const bodyArray: BodyArrayItem[] = [];
                 fx.getLibraryBody(
                   bodyArray,
                   fx.targetFolder.tree,
@@ -1016,10 +1114,10 @@ export class fx {
    * @param address
    * @returns {*}
    */
-  static getBody = function (folder: any, address: string, valuec?: any): any {
-    const array = [];
+  static getBody = function (folder: unknown, address: string, valuec?: unknown): unknown {
+    const array: BodyArrayItem[] = [];
     fx.recursionLibraryBody(array, folder, address);
-    if (valuec != null) {
+    if (valuec != null && array[0]) {
       (array[0] as any).body.setFunctionId(valuec);
     }
     return array[0];
@@ -1098,7 +1196,7 @@ export class fx {
     // 去掉空格expression，制表符，换行符
     expression = expression + "";
     expression = expression.replace(/\s+/g, "");
-    const operators = {
+    const operators: OperatorPrecedence = {
       "+": 1,
       "-": 1,
       "*": 2,
@@ -1177,8 +1275,8 @@ export class fx {
 
         while (
           isOperator(topOfStack) &&
-          ((operators[token] <= operators[topOfStack] && token !== "^") ||
-            (operators[token] < operators[topOfStack] && token === "^"))
+          ((operators[token as OperatorKey] <= operators[topOfStack as OperatorKey] && token !== "^") ||
+            (operators[token as OperatorKey] < operators[topOfStack as OperatorKey] && token === "^"))
         ) {
           popFromStack();
           topOfStack = stack[stack.length - 1];
@@ -1574,31 +1672,37 @@ export class fx {
    * @param body
    * @returns {string}
    */
-  static getAbsoluteAddress = function (body: any, copy?: boolean): string {
+  static getAbsoluteAddress = function (body: unknown, copy?: boolean): string {
+    if (!body || typeof body !== 'object') {
+      return '';
+    }
+    const bodyObj = body as Record<string, unknown>;
+    
     if (copy) {
-      var address = [];
+      const address: string[] = [];
       fx.getStepData(body, address, copy);
-      var addressString = "";
-      for (var i = 0; i < address.length; i++) {
+      let addressString = "";
+      for (let i = 0; i < address.length; i++) {
         addressString += address[i];
       }
       return addressString;
     }
 
-    if (body.site != null && body.site != undefined) {
-      return body.site;
+    if (bodyObj.site != null && bodyObj.site != undefined) {
+      return String(bodyObj.site);
     } else {
-      if (body.parentFolder == null) {
-        if (body.source != null) {
-          return body.source.absoluteAddress;
+      if (bodyObj.parentFolder == null) {
+        if (bodyObj.source != null && typeof bodyObj.source === 'object') {
+          const source = bodyObj.source as Record<string, unknown>;
+          return source.absoluteAddress ? String(source.absoluteAddress) : '';
         } else {
-          return body.name;
+          return bodyObj.name ? String(bodyObj.name) : '';
         }
       } else {
-        var address = [];
+        const address: string[] = [];
         fx.getStepData(body, address, copy);
-        var addressString = "";
-        for (var i = 0; i < address.length; i++) {
+        let addressString = "";
+        for (let i = 0; i < address.length; i++) {
           addressString += address[i];
         }
         return addressString;
@@ -1622,13 +1726,18 @@ export class fx {
    * @param array
    */
   static getStepData = function (
-    body: any,
+    body: unknown,
     array: string[],
     copy?: boolean
   ): void {
-    array.unshift(body.name);
-    if (body.parentFolder != null && body.parentFolder.name != null) {
-      fx.getStepData(body.parentFolder, array, copy);
+    if (body && typeof body === 'object' && 'name' in body) {
+      array.unshift(String((body as { name: unknown }).name));
+      if ('parentFolder' in body && body.parentFolder != null) {
+        const parentFolder = (body as { parentFolder: unknown }).parentFolder;
+        if (parentFolder && typeof parentFolder === 'object' && 'name' in parentFolder) {
+          fx.getStepData(parentFolder, array, copy);
+        }
+      }
     }
   };
 
@@ -1719,7 +1828,7 @@ export class fx {
         : "";
 
     if (logicalChildArray && logicalChildArray.length) {
-      logicalChildArray.forEach((logicalItem) => {
+      logicalChildArray.forEach((logicalItem: LogicalItem) => {
         const varData = fx.createVarData(
           logicalItem.TID,
           logicalItem.name,
@@ -1881,10 +1990,10 @@ export class fx {
    * @param 寻找运算体数组
    * @returns {[]}
    */
-  static seekSource = function (bodyArray) {
-    const parentArray: any[] = [];
+  static seekSource = function (bodyArray: BodyArrayItem[]) {
+    const parentArray: BodyArrayItem[] = [];
     for (let i = 0; i < bodyArray.length; i++) {
-      const bodyItem = bodyArray[i];
+      const bodyItem = bodyArray[i] as Record<string, unknown>;
       if (bodyItem.parent == null) {
         if (parentArray.length == 0) {
           parentArray.push(bodyItem);
@@ -2036,12 +2145,16 @@ export class fx {
    * @param source
    * @returns {{}}
    */
-  static copy = function (source: any): any {
-    const result = {};
+  static copy = function (source: unknown): Record<string, unknown> {
+    if (!source || typeof source !== 'object') {
+      return {};
+    }
+    const result: Record<string, unknown> = {};
     for (const key in source) {
-      if (source.hasOwnProperty(key)) {
+      if (Object.prototype.hasOwnProperty.call(source, key)) {
+        const value = (source as Record<string, unknown>)[key];
         result[key] =
-          typeof source[key] === "object" ? fx.copy(source[key]) : source[key];
+          typeof value === "object" && value !== null ? fx.copy(value) : value;
       }
     }
     return result;
@@ -2202,8 +2315,8 @@ export class fx {
               bodydataView.maxValue = dataTreeItem.maxValue;
               bodydataView.step = dataTreeItem.step;
               bodydataView.logicalChildArray = [];
-              dataTreeItem.logicalChildArray.forEach((variable) => {
-                const bodyArray = [];
+              dataTreeItem.logicalChildArray.forEach((variable: unknown) => {
+                const bodyArray: BodyArrayItem[] = [];
                 fx.getLibraryBody(
                   bodyArray,
                   fx.targetFolder.tree,
@@ -2229,7 +2342,7 @@ export class fx {
                 null
               );
             } else {
-              var bodyArray = [];
+              const bodyArray: BodyArrayItem[] = [];
               if (copy) {
                 fx.getLibraryBody(
                   bodyArray,
@@ -2365,8 +2478,8 @@ export class fx {
               bodydataView.maxValue = dataTreeItem.maxValue;
               bodydataView.step = dataTreeItem.step;
               bodydataView.logicalChildArray = [];
-              dataTreeItem.logicalChildArray.forEach((variable) => {
-                const bodyArray = [];
+              dataTreeItem.logicalChildArray.forEach((variable: unknown) => {
+                const bodyArray: BodyArrayItem[] = [];
                 fx.getLibraryBody(
                   bodyArray,
                   fx.targetFolder.tree,
@@ -2392,7 +2505,7 @@ export class fx {
                 null
               );
             } else {
-              var bodyArray = [];
+              const bodyArray: BodyArrayItem[] = [];
 
               if (copy) {
                 fx.getLibraryBody(
@@ -2589,8 +2702,8 @@ export class fx {
                   bodydataView.maxValue = dataTreeItem.maxValue;
                   bodydataView.step = dataTreeItem.step;
                   bodydataView.logicalChildArray = [];
-                  dataTreeItem.logicalChildArray.forEach((variable) => {
-                    const bodyArray = [];
+                  dataTreeItem.logicalChildArray.forEach((variable: unknown) => {
+                    const bodyArray: BodyArrayItem[] = [];
                     fx.getLibraryBody(
                       bodyArray,
                       fx.targetFolder.tree,
@@ -2616,7 +2729,7 @@ export class fx {
                     null
                   );
                 } else {
-                  var bodyArray = [];
+                  const bodyArray: BodyArrayItem[] = [];
 
                   if (copy) {
                     fx.getLibraryBody(
@@ -2763,8 +2876,8 @@ export class fx {
                   bodydataView.maxValue = dataTreeTreeItem.maxValue;
                   bodydataView.step = dataTreeTreeItem.step;
                   bodydataView.logicalChildArray = [];
-                  dataTreeTreeItem.logicalChildArray.forEach((variable) => {
-                    const bodyArray = [];
+                  dataTreeTreeItem.logicalChildArray.forEach((variable: unknown) => {
+                    const bodyArray: BodyArrayItem[] = [];
                     fx.getLibraryBody(
                       bodyArray,
                       fx.targetFolder.tree,
@@ -2790,7 +2903,7 @@ export class fx {
                     null
                   );
                 } else {
-                  var bodyArray = [];
+                  const bodyArray: BodyArrayItem[] = [];
 
                   if (copy) {
                     fx.getLibraryBody(
@@ -2973,7 +3086,7 @@ export class fx {
     fx.Call.send(
       fx.Eve.SHIFT_ADD_VARIABLEBODY,
       [parent, body],
-      function (e) {
+      function (e: unknown) {
         backView = e;
       }.bind(this)
     );
@@ -2993,7 +3106,7 @@ export class fx {
     fx.Call.send(
       fx.Eve.SHIFT_ADD_VARIABLEBODY,
       [parent, body],
-      function (e) {
+      function (e: unknown) {
         backView = e;
       }.bind(this)
     );
@@ -3013,7 +3126,7 @@ export class fx {
     fx.Call.send(
       fx.Eve.SHIFT_ADD_FUNCTION,
       [parent, body],
-      function (e) {
+      function (e: unknown) {
         backView = e;
       }.bind(this)
     );
@@ -3037,7 +3150,7 @@ export class fx {
     fx.Call.send(
       fx.Eve.SHIFT_ADD_FUNCTION,
       [parent, body],
-      function (e) {
+      function (e: unknown) {
         backView = e;
       }.bind(this)
     );
@@ -3072,7 +3185,7 @@ export class fx {
     fx.Call.send(
       fx.Eve.SHIFT_ADD_OPERATIONBODY,
       [x, y, type, body],
-      function (e) {
+      function (e: unknown) {
         backView = e;
         if (isWeight && backView) {
           (backView as any).openWeight();
@@ -3117,7 +3230,7 @@ export class fx {
     fx.Call.send(
       fx.Eve.SHIFT_ADD_BOOKMARK,
       [body],
-      function (e) {
+      function (e: unknown) {
         backView = e;
       }.bind(this)
     );
@@ -3303,8 +3416,8 @@ export class fx {
                 bodydataView.maxValue = treeTreeItem.maxValue;
                 bodydataView.step = treeTreeItem.step;
                 bodydataView.logicalChildArray = [];
-                treeTreeItem.logicalChildArray.forEach((variable) => {
-                  const bodyArray = [];
+                treeTreeItem.logicalChildArray.forEach((variable: unknown) => {
+                  const bodyArray: BodyArrayItem[] = [];
                   fx.getLibraryBody(
                     bodyArray,
                     fx.targetFolder.tree,
@@ -3330,7 +3443,7 @@ export class fx {
                   null
                 );
               } else {
-                var bodyArray = [];
+                const bodyArray: BodyArrayItem[] = [];
                 fx.getLibraryBody(
                   bodyArray,
                   fx.targetFolder.tree,
@@ -3455,8 +3568,8 @@ export class fx {
                 bodydataView.maxValue = treeTreeItem.maxValue;
                 bodydataView.step = treeTreeItem.step;
                 bodydataView.logicalChildArray = [];
-                treeTreeItem.logicalChildArray.forEach((variable) => {
-                  const bodyArray = [];
+                treeTreeItem.logicalChildArray.forEach((variable: unknown) => {
+                  const bodyArray: BodyArrayItem[] = [];
                   fx.getLibraryBody(
                     bodyArray,
                     fx.targetFolder.tree,
@@ -3482,7 +3595,7 @@ export class fx {
                   null
                 );
               } else {
-                var bodyArray = [];
+                const bodyArray: BodyArrayItem[] = [];
                 fx.getLibraryBody(
                   bodyArray,
                   fx.targetFolder.tree,

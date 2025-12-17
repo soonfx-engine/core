@@ -40,7 +40,7 @@ export class VariableValue extends BasicBody {
   name: string;
 
   /** 类型标识符 */
-  TID: string | number;
+  TID: string | number = "";
 
   /** 变量值 */
   value: any = 0;
@@ -322,7 +322,7 @@ export class VariableValue extends BasicBody {
         return this.getMacroValue();
 
       case NodeType.Sheet:
-        return this.getSheetValue(name, row, col);
+        return this.getSheetValue(name ?? '', Number(row ?? 0), Number(col ?? 0));
 
       case (NodeType as any).LogicalNumberList:
         return this.getLogicalNumberListValue();
@@ -357,18 +357,22 @@ export class VariableValue extends BasicBody {
         return this.returnFunc(this.value);
       }
 
-      if (fx.code) {
-        this.value = new Function(
-          `return ${fx["f_" + this.TID].fun.replace(/[\r\n\s]/g, "")}`
-        )();
-      } else {
-        try {
-          this.value = eval(this.macros);
-        } catch (e) {
-          this.value = 0;
-        }
+      // if (fx.code) {
+      //   this.value = new Function(
+      //     `return ${fx["f_" + this.TID].fun.replace(/[\r\n\s]/g, "")}`
+      //   )();
+      // } else {
+      //   try {
+      //     this.value = eval(this.macros);
+      //   } catch (e) {
+      //     this.value = 0;
+      //   }
+      // }
+      try {
+        this.value = eval(this.macros);
+      } catch (e) {
+        this.value = 0;
       }
-
       (globalThis as any).target = this.historyTarget;
 
       if (!isNaN(this.value)) {
@@ -387,7 +391,7 @@ export class VariableValue extends BasicBody {
    * 私有方法，从表格数据中获取值
    * @returns 表格值
    */
-  private getSheetValue(name, row, col): any {
+  private getSheetValue(name: string | number, row: number, col: number): any {
     this.value =
       this.source?.sheetData?.getValue(name, row, col) ||
       this.sheetData?.getValue(name, row, col) ||
