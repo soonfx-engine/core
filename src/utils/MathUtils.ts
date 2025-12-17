@@ -7,16 +7,11 @@
 
 /**
  * 判断是否为有效数字
- * @param token 待检查的值
+ * @param value 待检查的值
  * @returns 是否为有效数字
  */
-export function isNumber(token: any): boolean {
-  try {
-    return !isNaN(Number(token)) && isFinite(Number(token));
-  } catch (error) {
-    console.error("Error checking if value is number:", error);
-    return false;
-  }
+export function isNumber(value: unknown): value is number {
+  return typeof value === 'number' && !isNaN(value) && isFinite(value);
 }
 
 /**

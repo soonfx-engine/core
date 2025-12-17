@@ -22,11 +22,16 @@ describe('fx (System)', () => {
 
     it('isNumber should identify numbers correctly', () => {
       expect(fx.isNumber(123)).toBe(true);
-      expect(fx.isNumber('123')).toBe(true);
+      expect(fx.isNumber(0)).toBe(true);
+      expect(fx.isNumber(-123.45)).toBe(true);
+      expect(fx.isNumber(Infinity)).toBe(false);
+      expect(fx.isNumber(NaN)).toBe(false);
+      expect(fx.isNumber('123')).toBe(false);
       expect(fx.isNumber('abc')).toBe(false);
-      // Current implementation treats null as 0, hence isNumber(null) is true
-      expect(fx.isNumber(null)).toBe(true); 
+      expect(fx.isNumber(null)).toBe(false);
       expect(fx.isNumber(undefined)).toBe(false);
+      expect(fx.isNumber({})).toBe(false);
+      expect(fx.isNumber([])).toBe(false);
     });
   });
 
