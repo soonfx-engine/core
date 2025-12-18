@@ -5,6 +5,10 @@
  * 重构日期: 2025年12月
  */
 
+import { createLogger } from "./Logger";
+
+const logger = createLogger("MathUtils");
+
 /**
  * 判断是否为有效数字
  * @param value 待检查的值
@@ -34,7 +38,7 @@ export function mix(v1: number, v2: number, t: number): number {
     }
     return v1 * (1 - t) + v2 * t;
   } catch (error) {
-    console.error("Error in mix function:", error);
+    logger.error("Error in mix function", error as Error, { v1, v2, t });
     return 0;
   }
 }
@@ -70,7 +74,7 @@ export function cross(
     }
     return p1x * p2y - p1y * p2x;
   } catch (error) {
-    console.error("Error in cross function:", error);
+    logger.error("Error in cross function", error as Error, { p1x, p1y, p2x, p2y });
     return 0;
   }
 }
@@ -98,7 +102,7 @@ export function dot(
     }
     return p1x * p2x + p1y * p2y;
   } catch (error) {
-    console.error("Error in dot function:", error);
+    logger.error("Error in dot function", error as Error, { p1x, p1y, p2x, p2y });
     return 0;
   }
 }
@@ -118,7 +122,7 @@ export function length(a: number, b: number): number {
     }
     return Math.sqrt(a * a + b * b);
   } catch (error) {
-    console.error("Error in length function:", error);
+    logger.error("Error in length function", error as Error, { a, b });
     return 0;
   }
 }
@@ -148,7 +152,7 @@ export function distance(
     const b = Math.abs(p1y - p2y);
     return length(a, b);
   } catch (error) {
-    console.error("Error in distance function:", error);
+    logger.error("Error in distance function", error as Error, { p1x, p1y, p2x, p2y });
     return 0;
   }
 }
@@ -171,7 +175,7 @@ export function clamp(value: number, min: number, max: number): number {
     }
     return Math.max(min, Math.min(max, value));
   } catch (error) {
-    console.error("Error in clamp function:", error);
+    logger.error("Error in clamp function", error as Error, { value, min, max });
     return value;
   }
 }
@@ -195,7 +199,7 @@ export function normalize(x: number, y: number): [number, number] {
     }
     return [x / len, y / len];
   } catch (error) {
-    console.error("Error in normalize function:", error);
+    logger.error("Error in normalize function", error as Error, { x, y });
     return [0, 0];
   }
 }

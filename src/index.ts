@@ -22,6 +22,21 @@ export { OperationLayerData } from "./data/layers/OperationLayerData";
 export { Message } from "./communication/messaging/Message";
 export { NodeType } from "./core/types/NodeType";
 export { MathUtils } from "./utils/MathUtils";
+export {
+  Logger,
+  LogLevel,
+  LogEntry,
+  LoggerConfig,
+  LogTransport,
+  ConsoleTransport,
+  MemoryTransport,
+  CallbackTransport,
+  createLogger,
+  configureLogger,
+  setLogLevel,
+  setModuleLogLevel,
+  getLogBuffer,
+} from "./utils/Logger";
 
 /**
  * 环境兼容性处理：支持多种 JavaScript 运行环境
