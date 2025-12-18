@@ -56,7 +56,7 @@ export const lerp = mix;
  * @param p2y 第二个向量的y分量
  * @returns 叉积结果 (标量)
  * @example
- * cross(1, 0, 0, 1) // 返回 0
+ * cross(1, 0, 0, 1) // 返回 1
  */
 export function cross(
   p1x: number,
@@ -68,7 +68,7 @@ export function cross(
     if (!isNumber(p1x) || !isNumber(p1y) || !isNumber(p2x) || !isNumber(p2y)) {
       throw new Error("Invalid parameters for cross function");
     }
-    return p1x * p2x - p1y * p2y;
+    return p1x * p2y - p1y * p2x;
   } catch (error) {
     console.error("Error in cross function:", error);
     return 0;
