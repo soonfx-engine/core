@@ -73,6 +73,18 @@ import { OperationLayerData } from "../../data/layers/OperationLayerData";
 import { Message } from "../../communication/messaging/Message";
 import { NodeType } from "../../core/types/NodeType";
 import { MathUtils } from "../../utils/MathUtils";
+import {
+  Logger,
+  LogLevel,
+  configureLogger,
+  setLogLevel,
+  setModuleLogLevel,
+  getLogBuffer,
+  createLogger,
+  LogEntry,
+  LoggerConfig,
+  LogTransport,
+} from "../../utils/Logger";
 
 // ==================== 类型定义和接口 ====================
 
@@ -171,6 +183,8 @@ function isDataItem(item: unknown): item is DataItem {
  * 用于系统测试和验证
  */
 class A {
+  protected logger = createLogger("test/A");
+
   /**
    * 测试方法
    */
@@ -178,7 +192,7 @@ class A {
     try {
       console.log("console A");
     } catch (error) {
-      console.error("Error in class A test:", error);
+      this.logger.error("Error in class A test", error as Error);
     }
   }
 }
@@ -188,6 +202,8 @@ class A {
  * 继承自类A，用于测试继承功能
  */
 class B extends A {
+  protected logger = createLogger("test/B");
+
   constructor() {
     super();
   }
@@ -199,7 +215,7 @@ class B extends A {
     try {
       console.log("console B");
     } catch (error) {
-      console.error("Error in class B test:", error);
+      this.logger.error("Error in class B test", error as Error);
     }
   }
 }
@@ -300,6 +316,58 @@ export class fx {
    * 可直接访问完整的 MathUtils 模块
    */
   static MathUtils = MathUtils;
+
+  // ==================== 日志系统 ====================
+
+  /**
+   * Logger 模块引用
+   */
+  static Logger = Logger;
+  static LogLevel = LogLevel;
+
+  /**
+   * 创建模块日志记录器
+   * @param module 模块名称
+   * @returns Logger 实例
+   */
+  static createLogger(module: string): Logger {
+    return createLogger(module);
+  }
+
+  /**
+   * 配置全局日志系统
+   * @param config 日志配置
+   */
+  static configureLogger(config: Partial<LoggerConfig>): void {
+    configureLogger(config);
+  }
+
+  /**
+   * 设置全局日志级别
+   * @param level 日志级别
+   */
+  static setLogLevel(level: LogLevel): void {
+    setLogLevel(level);
+  }
+
+  /**
+   * 设置特定模块的日志级别
+   * @param module 模块名称
+   * @param level 日志级别
+   */
+  static setModuleLogLevel(module: string, level: LogLevel): void {
+    setModuleLogLevel(module, level);
+  }
+
+  /**
+   * 获取日志缓冲区中的最近日志
+   * @param count 要获取的日志数量（可选）
+   * @returns 日志条目数组
+   */
+  static getLogBuffer(count?: number): LogEntry[] {
+    return getLogBuffer(count);
+  }
+
   // ==================== 系统状态属性 ====================
 
   /** 看板列表 */
@@ -3735,6 +3803,7 @@ export class fx {
    * 启动 FX 引擎核心功能
    */
   static init = function (): void {
+    const logger = createLogger("system");
     try {
       if (fx.isStart === false) {
         fx.isStart = true;
@@ -3748,7 +3817,7 @@ export class fx {
         // fx.parseLibraryBody(fx_json_data.library.operationArray, true);
       }
     } catch (error) {
-      console.error("Error initializing FX system:", error);
+      logger.error("Error initializing FX system", error as Error);
       fx.isStart = false;
       fx.code = false;
     }
@@ -3768,6 +3837,7 @@ export class fx {
     lflist: any[],
     brlist: any[]
   ): void {
+    const logger = createLogger("system/data");
     try {
       if (!obj || !obj.tree || !Array.isArray(obj.tree)) {
         throw new Error("Invalid object structure for recursive reading");
@@ -3788,7 +3858,7 @@ export class fx {
         }
       }
     } catch (error) {
-      console.error("Error in recursive data reading:", error);
+      logger.error("Error in recursive data reading", error as Error, { obj: obj?.name || "unknown" });
     }
   }
 }
