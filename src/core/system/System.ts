@@ -190,7 +190,7 @@ class A {
    */
   test(): void {
     try {
-      console.log("console A");
+      this.logger.debug("Test method called in class A");
     } catch (error) {
       this.logger.error("Error in class A test", error as Error);
     }
@@ -213,7 +213,7 @@ class B extends A {
    */
   test(): void {
     try {
-      console.log("console B");
+      this.logger.debug("Test method called in class B");
     } catch (error) {
       this.logger.error("Error in class B test", error as Error);
     }

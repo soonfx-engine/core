@@ -4,6 +4,9 @@ import { CallCenter } from "../../communication/messaging/CallCenter";
 import { Folder } from "../../data/storage/Folder";
 import { VariableValue } from "../../data/models/VariableValue";
 import { FormulaData } from "../../data/metadata/FormulaData";
+import { createLogger } from "../../utils/Logger";
+
+const logger = createLogger("game/combat/Player");
 
 /**
  * 参数信息接口
@@ -689,7 +692,7 @@ export class Player {
     if (obj != null) {
       obj.setValue(value);
     } else {
-      console.log("没有找到属性");
+      logger.warn("Property not found", { site });
     }
 
     return value;
@@ -711,7 +714,7 @@ export class Player {
       return (fx.getBody(this.playerData, fx.parseAbsoluteAddress(site), value) as any)
         .getValue();
     } else {
-      console.log("没有找到属性");
+      logger.warn("Property not found", { site });
     }
     return 0;
   }

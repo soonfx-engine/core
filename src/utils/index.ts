@@ -1,6 +1,9 @@
 import { BasicBody } from "../data/models/BasicBody";
+import { createLogger } from "./Logger";
 export { MathUtils } from "./MathUtils";
 export * from "./MathUtils";
+
+const logger = createLogger("utils");
 
 /**
  * 安全获取 BasicBody 对象的值
@@ -34,7 +37,7 @@ export function getCatchValue(
   try {
     value = body.getValue(name, row, col);
   } catch (e) {
-    console.log(e);
+    logger.error("Error getting value from BasicBody", e as Error);
     value = 0;
   }
   return value;
